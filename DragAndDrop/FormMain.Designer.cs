@@ -35,9 +35,10 @@
             // pictureBox
             // 
             pictureBox.BackColor = Color.White;
-            pictureBox.Location = new Point(12, 12);
+            pictureBox.Dock = DockStyle.Fill;
+            pictureBox.Location = new Point(15, 15);
             pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(560, 537);
+            pictureBox.Size = new Size(1554, 831);
             pictureBox.TabIndex = 0;
             pictureBox.TabStop = false;
             pictureBox.Paint += pictureBox_Paint;
@@ -49,12 +50,13 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(584, 561);
+            ClientSize = new Size(1584, 861);
             Controls.Add(pictureBox);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            MaximizeBox = false;
+            MinimumSize = new Size(720, 480);
             Name = "FormMain";
+            Padding = new Padding(15);
             Text = "DragAndDrop";
+            WindowState = FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             ResumeLayout(false);
         }
