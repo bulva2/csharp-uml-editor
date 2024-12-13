@@ -4,11 +4,13 @@
     {
         private List<Box> _boxes;
         private Selection? _selection;
+        private ListManipulator<Box> _manipulator;
 
         public Canvas()
         {
             _boxes = new List<Box>();
             _selection = null;
+            _manipulator = new ListManipulator<Box>(_boxes);
 
             for(int i = 0; i < 5; i++)
             {
@@ -26,20 +28,23 @@
         public void Select(int x, int y)
         {
             Unselect();
-            for (int i = 0; i < _boxes.Count; i++)
+
+            for (int i = _boxes.Count - 1; i >= 0; i--)
             {
                 Box box = _boxes[i];
                 if (box.IsInCollisionWithCorner(x, y))
                 {
-                    //MessageBox.Show("Corner selected!");
-
                     _selection = new ResizeSelection(box, x, y);
+
+                    _manipulator.MoveToLast(i);
                     _selection.Select();
                     return;
                 }
                 else if (box.IsInCollision(x, y))
                 {
                     _selection = new MoveSelection(box, x, y);
+
+                    _manipulator.MoveToLast(i);
                     _selection.Select();
                     return;
                 }
