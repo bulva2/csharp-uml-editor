@@ -8,9 +8,11 @@
         public int Height { get; private set; }
 
         public int MinWidth => 80;
-        public int MinHeight => 40;
+        public int MinHeight => 140;
         public int MaxWidth => 320;
         public int MaxHeight => 320;
+
+        private StringFormat _formatCenter;
 
         private Brush _color;
         private string _text;
@@ -20,21 +22,27 @@
             PositionX = x;
             PositionY = y;
 
-            Width = 80;
-            Height = 80;
-            _color = Brushes.Red;
+            Width = 140;
+            Height = 140;
+            _color = Brushes.LightSkyBlue;
             _text = "Box";
+
+            _formatCenter = new StringFormat()
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
         }
 
         public void Select()
         {
-            _color = Brushes.Blue;
+            _color = Brushes.LightBlue;
             _text = "Selected";
         }
 
         public void Unselect()
         {
-            _color = Brushes.Red;
+            _color = Brushes.LightSkyBlue;
             _text = "Box";
         }
 
@@ -67,7 +75,10 @@
             g.TranslateTransform(PositionX, PositionY);
             g.FillRectangle(_color, 0, 0, Width, Height);
             g.FillRectangle(Brushes.Black, Width - 10, Height - 10, 10, 10);
-            g.DrawString(_text, new Font("Arial", 10), Brushes.Black, 10, 10);
+
+            g.DrawString(Height.ToString(), new Font("Arial", 10), Brushes.Black, Width / 2, Height * 0.3f, _formatCenter);
+
+            g.DrawString(_text, new Font("Arial", 10), Brushes.Black, Width / 2, Height * 0.1f, _formatCenter);
             g.ResetTransform();
         }
 

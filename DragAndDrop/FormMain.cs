@@ -33,5 +33,26 @@ namespace DragAndDrop
         {
             _canvas.Draw(e.Graphics);
         }
+
+        private void classToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                Point relativePosition = new Point(e.X, e.Y);
+                Point screenPosition = pictureBox.PointToScreen(relativePosition);
+
+                contextMenuStripRC.Show(screenPosition);
+            }
+        }
+
+        private void testToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
