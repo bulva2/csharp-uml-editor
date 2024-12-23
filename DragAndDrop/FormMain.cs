@@ -1,3 +1,5 @@
+using DragAndDrop.Boxes;
+
 namespace DragAndDrop
 {
     public partial class FormMain : Form
@@ -34,11 +36,6 @@ namespace DragAndDrop
             _canvas.Draw(e.Graphics);
         }
 
-        private void classToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void pictureBox_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -50,7 +47,31 @@ namespace DragAndDrop
             }
         }
 
-        private void testToolStripMenuItem_Click(object sender, EventArgs e)
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+#if DEBUG
+            Console.WriteLine("Debug Mode Active - Main Form Loaded");
+#endif
+        }
+
+        private void classToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            ClassBox classBox = new ClassBox(10, 10, "Testuju!");
+            _canvas.AddBoxToList(classBox);
+        }
+
+        private void newClassRC_Click(object sender, EventArgs e)
+        {
+            Point screenPosition = Cursor.Position;
+            Point relativePosition = pictureBox.PointToClient(screenPosition);
+
+            ClassBox classBox = new ClassBox(relativePosition.X, relativePosition.Y, "Testuju!");
+            classBox.PositionX -= classBox.Width / 2;
+            classBox.PositionY -= classBox.Height / 2;
+            _canvas.AddBoxToList(classBox);
+        }
+
+        private void FormMain_MouseDoubleClick(object sender, MouseEventArgs e)
         {
 
         }

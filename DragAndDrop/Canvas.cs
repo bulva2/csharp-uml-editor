@@ -1,4 +1,6 @@
-﻿namespace DragAndDrop
+﻿using DragAndDrop.Boxes;
+
+namespace DragAndDrop
 {
     public class Canvas
     {
@@ -14,7 +16,7 @@
 
             for(int i = 0; i < 5; i++)
             {
-                Box box = new Box(10, (i * 100) + 10);
+                Box box = new ClassBox(10, (i * 100) + 10, i.ToString());
                 _boxes.Add(box);
             }
         }
@@ -50,6 +52,7 @@
                 }
             }
         }
+
         public void Unselect()
         {
             if (_selection == null)
@@ -66,5 +69,7 @@
 
             _selection.Move(x, y);
         }
+
+        public void AddBoxToList(Box box) => _boxes.Add(box);
     }
 }

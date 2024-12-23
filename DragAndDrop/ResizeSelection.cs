@@ -1,4 +1,6 @@
-﻿namespace DragAndDrop
+﻿using DragAndDrop.Boxes;
+
+namespace DragAndDrop
 {
     public class ResizeSelection : Selection
     {

@@ -1,23 +1,25 @@
-﻿namespace DragAndDrop
+﻿namespace DragAndDrop.Boxes
 {
-    public class Box
+    public abstract class Box
     {
-        public int PositionX { get; private set; }
-        public int PositionY { get; private set; }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+        public int PositionX { get; set; }
+        public int PositionY { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
 
         public int MinWidth => 80;
         public int MinHeight => 140;
         public int MaxWidth => 320;
         public int MaxHeight => 320;
 
-        private StringFormat _formatCenter;
+        protected StringFormat _formatCenter;
 
-        private Brush _color;
-        private string _text;
+        protected Brush _color;
 
-        public Box(int x, int y)
+        protected string _name;
+        protected string _originalName;
+
+        public Box(int x, int y, string name)
         {
             PositionX = x;
             PositionY = y;
@@ -25,7 +27,9 @@
             Width = 140;
             Height = 140;
             _color = Brushes.LightSkyBlue;
-            _text = "Box";
+
+            _name = name;
+            _originalName = name;
 
             _formatCenter = new StringFormat()
             {
@@ -37,13 +41,13 @@
         public void Select()
         {
             _color = Brushes.LightBlue;
-            _text = "Selected";
+            _name = "Selected";
         }
 
         public void Unselect()
         {
             _color = Brushes.LightSkyBlue;
-            _text = "Box";
+            _name =  _originalName;
         }
 
         public void Move(int x, int y)
@@ -70,15 +74,22 @@
             Height = h;
         }
 
-        public void Draw(Graphics g)
+        public virtual void Draw(Graphics g)
         {
+            // Set coords to begin in top-left corner of the box
             g.TranslateTransform(PositionX, PositionY);
+
+            // Draw Box
             g.FillRectangle(_color, 0, 0, Width, Height);
             g.FillRectangle(Brushes.Black, Width - 10, Height - 10, 10, 10);
 
-            g.DrawString(Height.ToString(), new Font("Arial", 10), Brushes.Black, Width / 2, Height * 0.3f, _formatCenter);
+            // Name of the box (Class/Interface Name)
+            g.DrawString(_name, new Font("Segoe UI", 10, FontStyle.Bold), Brushes.Black, Width / 2, Height * 0.1f, _formatCenter);
 
-            g.DrawString(_text, new Font("Arial", 10), Brushes.Black, Width / 2, Height * 0.1f, _formatCenter);
+            // Line under the name
+            g.DrawLine(Pens.Black, 0, Height * 0.2f, Width, Height * 0.2f);
+
+            // Reset coords
             g.ResetTransform();
         }
 
@@ -90,8 +101,8 @@
 
         public bool IsInCollisionWithCorner(int x, int y)
         {
-            return x > (PositionX + Width - 10) && x <= PositionX + Width
-                && y > (PositionY + Height - 10) && y <= PositionY + Height;
+            return x > PositionX + Width - 10 && x <= PositionX + Width
+                && y > PositionY + Height - 10 && y <= PositionY + Height;
         }
     }
 }

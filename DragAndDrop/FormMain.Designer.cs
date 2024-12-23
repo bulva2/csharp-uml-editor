@@ -42,9 +42,9 @@
             abstractClassToolStripMenuItem = new ToolStripMenuItem();
             interfaceToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStripRC = new ContextMenuStrip(components);
-            testToolStripMenuItem = new ToolStripMenuItem();
-            newAbstractClassToolStripMenuItem = new ToolStripMenuItem();
-            newInterfaceToolStripMenuItem = new ToolStripMenuItem();
+            newClassRC = new ToolStripMenuItem();
+            newAbstractRC = new ToolStripMenuItem();
+            newInterfaceRC = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             menuStrip.SuspendLayout();
             contextMenuStripRC.SuspendLayout();
@@ -124,6 +124,7 @@
             classToolStripMenuItem.Name = "classToolStripMenuItem";
             classToolStripMenuItem.Size = new Size(148, 22);
             classToolStripMenuItem.Text = "Class";
+            classToolStripMenuItem.Click += classToolStripMenuItem_Click_1;
             // 
             // abstractClassToolStripMenuItem
             // 
@@ -139,28 +140,28 @@
             // 
             // contextMenuStripRC
             // 
-            contextMenuStripRC.Items.AddRange(new ToolStripItem[] { testToolStripMenuItem, newAbstractClassToolStripMenuItem, newInterfaceToolStripMenuItem });
+            contextMenuStripRC.Items.AddRange(new ToolStripItem[] { newClassRC, newAbstractRC, newInterfaceRC });
             contextMenuStripRC.Name = "contextMenuStripRC";
             contextMenuStripRC.Size = new Size(176, 70);
             // 
-            // testToolStripMenuItem
+            // newClassRC
             // 
-            testToolStripMenuItem.Name = "testToolStripMenuItem";
-            testToolStripMenuItem.Size = new Size(175, 22);
-            testToolStripMenuItem.Text = "New Class";
-            testToolStripMenuItem.Click += testToolStripMenuItem_Click;
+            newClassRC.Name = "newClassRC";
+            newClassRC.Size = new Size(175, 22);
+            newClassRC.Text = "New Class";
+            newClassRC.Click += newClassRC_Click;
             // 
-            // newAbstractClassToolStripMenuItem
+            // newAbstractRC
             // 
-            newAbstractClassToolStripMenuItem.Name = "newAbstractClassToolStripMenuItem";
-            newAbstractClassToolStripMenuItem.Size = new Size(175, 22);
-            newAbstractClassToolStripMenuItem.Text = "New Abstract Class";
+            newAbstractRC.Name = "newAbstractRC";
+            newAbstractRC.Size = new Size(175, 22);
+            newAbstractRC.Text = "New Abstract Class";
             // 
-            // newInterfaceToolStripMenuItem
+            // newInterfaceRC
             // 
-            newInterfaceToolStripMenuItem.Name = "newInterfaceToolStripMenuItem";
-            newInterfaceToolStripMenuItem.Size = new Size(175, 22);
-            newInterfaceToolStripMenuItem.Text = "New Interface";
+            newInterfaceRC.Name = "newInterfaceRC";
+            newInterfaceRC.Size = new Size(175, 22);
+            newInterfaceRC.Text = "New Interface";
             // 
             // FormMain
             // 
@@ -175,6 +176,8 @@
             Padding = new Padding(15, 0, 15, 15);
             Text = "UML Diagram Editor";
             WindowState = FormWindowState.Maximized;
+            Load += FormMain_Load;
+            MouseDoubleClick += FormMain_MouseDoubleClick;
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
@@ -198,8 +201,8 @@
         private ToolStripMenuItem abstractClassToolStripMenuItem;
         private ToolStripMenuItem interfaceToolStripMenuItem;
         private ContextMenuStrip contextMenuStripRC;
-        private ToolStripMenuItem testToolStripMenuItem;
-        private ToolStripMenuItem newAbstractClassToolStripMenuItem;
-        private ToolStripMenuItem newInterfaceToolStripMenuItem;
+        private ToolStripMenuItem newClassRC;
+        private ToolStripMenuItem newAbstractRC;
+        private ToolStripMenuItem newInterfaceRC;
     }
 }
