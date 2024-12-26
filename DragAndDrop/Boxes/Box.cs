@@ -38,13 +38,13 @@
             };
         }
 
-        public void Select()
+        public virtual void Select()
         {
             _color = Brushes.LightBlue;
             _name = "Selected";
         }
 
-        public void Unselect()
+        public virtual void Unselect()
         {
             _color = Brushes.LightSkyBlue;
             _name =  _originalName;
