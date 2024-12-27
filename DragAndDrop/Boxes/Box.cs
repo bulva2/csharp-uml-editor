@@ -7,29 +7,32 @@
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public int MinWidth => 80;
-        public int MinHeight => 140;
-        public int MaxWidth => 320;
-        public int MaxHeight => 320;
+        public string OriginalName { get; set; }
+
+        public int MinWidth => 180;
+        public int MinHeight => 180;
+        public int MaxWidth => 360;
+        public int MaxHeight => 360;
 
         protected StringFormat _formatCenter;
-
         protected Brush _color;
-
         protected string _name;
-        protected string _originalName;
+
+        protected List<Label> _labels;
 
         public Box(int x, int y, string name)
         {
             PositionX = x;
             PositionY = y;
 
-            Width = 140;
-            Height = 140;
+            Width = 180;
+            Height = 180;
             _color = Brushes.LightSkyBlue;
 
             _name = name;
-            _originalName = name;
+            OriginalName = name;
+
+            _labels = new List<Label>();
 
             _formatCenter = new StringFormat()
             {
@@ -47,7 +50,7 @@
         public virtual void Unselect()
         {
             _color = Brushes.LightSkyBlue;
-            _name =  _originalName;
+            _name =  OriginalName;
         }
 
         public void Move(int x, int y)
@@ -72,6 +75,8 @@
 
             Width = w;
             Height = h;
+
+            UpdateLabelPositions();
         }
 
         public virtual void Draw(Graphics g)
@@ -89,6 +94,8 @@
             // Line under the name
             g.DrawLine(Pens.Black, 0, Height * 0.2f, Width, Height * 0.2f);
 
+            DrawProperties(g);
+
             // Reset coords
             g.ResetTransform();
         }
@@ -99,10 +106,44 @@
                 && y > PositionY && y <= PositionY + Height;
         }
 
+        public bool IsInCollisionWithHeader(int x, int y)
+        {
+            return x > PositionX && x <= PositionX + Width
+                && y > PositionY && y <= PositionY + Height * 0.2f;
+        }
+
         public bool IsInCollisionWithCorner(int x, int y)
         {
             return x > PositionX + Width - 10 && x <= PositionX + Width
                 && y > PositionY + Height - 10 && y <= PositionY + Height;
         }
+
+        public void AddProperty(string property)
+        {
+            Label propertyLabel = new Label()
+            {
+                Text = property,
+                AutoSize = true,
+                Location = new Point(10, ((Height * 2) / 9) + (_labels.Count * 20))
+            };
+
+            _labels.Add(propertyLabel);
+        }
+
+        private void DrawProperties(Graphics g)
+        {
+            foreach (Label label in _labels)
+                g.DrawString(label.Text, new Font("Segoe UI", 12), Brushes.Black, label.Location);
+        }
+
+        private void UpdateLabelPositions()
+        {
+            for (int i = 0; i < _labels.Count; i++)
+            {
+                _labels[i].Location = new Point(10, ((Height * 2) / 9) + (_labels.Count + i * 20));
+            }
+        }
+
+        public void UpdateBoxName() => _name = OriginalName;
     }
 }

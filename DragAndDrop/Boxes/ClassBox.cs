@@ -13,8 +13,8 @@ namespace DragAndDrop.Boxes
             PositionX = x;
             PositionY = y;
 
-            Width = 140;
-            Height = 140;
+            Width = 180;
+            Height = 180;
             _color = Brushes.LightSkyBlue;
             _name = name;
 

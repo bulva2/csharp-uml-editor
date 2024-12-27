@@ -13,8 +13,8 @@ namespace DragAndDrop.Boxes
 			PositionX = x;
 			PositionY = y;
 
-			Width = 140;
-			Height = 140;
+			Width = 180;
+			Height = 180;
 			_color = Brushes.LightCoral;
 			_name = name;
 
@@ -24,5 +24,11 @@ namespace DragAndDrop.Boxes
 				LineAlignment = StringAlignment.Center
 			};
 		}
-	}
+
+        public override void Unselect()
+        {
+            _color = Brushes.LightCoral;
+			_name = OriginalName;
+        }
+    }
 }

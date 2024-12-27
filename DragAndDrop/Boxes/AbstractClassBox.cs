@@ -48,7 +48,7 @@ namespace DragAndDrop.Boxes
 		public override void Unselect()
 		{
 			_color = Brushes.AliceBlue;
-			_name = _originalName;
+			_name = OriginalName;
 		}
 	}
 }
