@@ -104,6 +104,8 @@ namespace DragAndDrop
 
         public void AddBoxToList(Box box) => _boxes.Add(box);
 
+        public void RemoveBoxFromList(Box box) => _boxes.Remove(box);
+
         public bool DoesBoxNameExist(string name)
         {
             return _boxes.Exists(box => box.OriginalName == name);

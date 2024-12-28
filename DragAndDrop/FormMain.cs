@@ -252,5 +252,15 @@ namespace DragAndDrop
                 }
             }
         }
+
+        private void deleteBoxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show($"Do you really wish to delete {_selectedBox!.OriginalName}?", "Delete Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+            if (result == DialogResult.Yes)
+            {
+                _canvas.RemoveBoxFromList(_selectedBox!);
+                pictureBox.Refresh();
+            }
+        }
     }
 }

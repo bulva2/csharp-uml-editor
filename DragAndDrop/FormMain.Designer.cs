@@ -51,6 +51,9 @@
             addMethodToolStripMenuItem = new ToolStripMenuItem();
             saveFileDialogPng = new SaveFileDialog();
             saveFileDialogJpg = new SaveFileDialog();
+            addConstructorToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            deleteBoxToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             menuStrip.SuspendLayout();
             contextMenuStripRC.SuspendLayout();
@@ -185,21 +188,21 @@
             // 
             // contextMenuStripBox
             // 
-            contextMenuStripBox.Items.AddRange(new ToolStripItem[] { addPropertyToolStripMenuItem, addMethodToolStripMenuItem });
+            contextMenuStripBox.Items.AddRange(new ToolStripItem[] { addPropertyToolStripMenuItem, addMethodToolStripMenuItem, addConstructorToolStripMenuItem, toolStripSeparator1, deleteBoxToolStripMenuItem });
             contextMenuStripBox.Name = "contextMenuStripBox";
-            contextMenuStripBox.Size = new Size(145, 48);
+            contextMenuStripBox.Size = new Size(181, 120);
             // 
             // addPropertyToolStripMenuItem
             // 
             addPropertyToolStripMenuItem.Name = "addPropertyToolStripMenuItem";
-            addPropertyToolStripMenuItem.Size = new Size(144, 22);
+            addPropertyToolStripMenuItem.Size = new Size(180, 22);
             addPropertyToolStripMenuItem.Text = "Add Property";
             addPropertyToolStripMenuItem.Click += addPropertyToolStripMenuItem_Click;
             // 
             // addMethodToolStripMenuItem
             // 
             addMethodToolStripMenuItem.Name = "addMethodToolStripMenuItem";
-            addMethodToolStripMenuItem.Size = new Size(144, 22);
+            addMethodToolStripMenuItem.Size = new Size(180, 22);
             addMethodToolStripMenuItem.Text = "Add Method";
             // 
             // saveFileDialogPng
@@ -211,6 +214,24 @@
             // 
             saveFileDialogJpg.FileName = "export.jpg";
             saveFileDialogJpg.Filter = "JPG File (*.jpg)|*.jpg";
+            // 
+            // addConstructorToolStripMenuItem
+            // 
+            addConstructorToolStripMenuItem.Name = "addConstructorToolStripMenuItem";
+            addConstructorToolStripMenuItem.Size = new Size(162, 22);
+            addConstructorToolStripMenuItem.Text = "Add Constructor";
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(159, 6);
+            // 
+            // deleteBoxToolStripMenuItem
+            // 
+            deleteBoxToolStripMenuItem.Name = "deleteBoxToolStripMenuItem";
+            deleteBoxToolStripMenuItem.Size = new Size(180, 22);
+            deleteBoxToolStripMenuItem.Text = "Delete Box";
+            deleteBoxToolStripMenuItem.Click += deleteBoxToolStripMenuItem_Click;
             // 
             // FormMain
             // 
@@ -260,5 +281,8 @@
         private SaveFileDialog saveFileDialogPng;
         private ToolStripMenuItem toolStripMenuItem1;
         private SaveFileDialog saveFileDialogJpg;
+        private ToolStripMenuItem addConstructorToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem deleteBoxToolStripMenuItem;
     }
 }
