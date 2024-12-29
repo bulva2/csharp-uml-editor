@@ -84,7 +84,12 @@ namespace DragAndDrop
                 box.PositionX -= box.Width / 2;
                 box.PositionY -= box.Height / 2;
                 _canvas.AddBoxToList(box);
+
+#if DEBUG
+                Console.WriteLine($"Successfully created ClassBox \"{box.OriginalName}\"");
+#endif
             }
+
         }
 
         private void newAbstractRC_Click(object sender, EventArgs e)

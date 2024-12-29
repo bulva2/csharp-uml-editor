@@ -7,6 +7,9 @@
     <Compile Update="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="FormMethodAdder.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="FormPropertyEdit.cs">
       <SubType>Form</SubType>
     </Compile>
