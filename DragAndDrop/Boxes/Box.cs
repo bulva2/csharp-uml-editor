@@ -19,6 +19,9 @@
         protected string _name;
 
         protected List<Label> _labels;
+        protected List<Label> _methods;
+
+        private int _separator = 0;
 
         public Box(int x, int y, string name)
         {
@@ -33,6 +36,7 @@
             OriginalName = name;
 
             _labels = new List<Label>();
+            _methods = new List<Label>();
 
             _formatCenter = new StringFormat()
             {
@@ -77,6 +81,7 @@
             Height = h;
 
             UpdateLabelPositions();
+            UpdateMethodPositions();
         }
 
         public virtual void Draw(Graphics g)
@@ -95,6 +100,13 @@
             g.DrawLine(Pens.Black, 0, Height * 0.2f, Width, Height * 0.2f);
 
             DrawProperties(g);
+
+			using (Pen pen = new Pen(Color.Black, 1))
+			{
+				g.DrawLine(pen, 0, _separator, Width, _separator);
+			}
+
+			DrawMethods(g);
 
             // Reset coords
             g.ResetTransform();
@@ -128,7 +140,9 @@
             };
 
             _labels.Add(propertyLabel);
+            UpdateSeparator();
         }
+
 
         private void DrawProperties(Graphics g)
         {
@@ -144,6 +158,43 @@
             }
         }
 
+        public void AddMethod(string method)
+        {
+            Label methodLabel = new Label()
+            {
+                Text = method,
+                AutoSize = true,
+                Location = new Point(10, _separator + 10 + (_methods.Count * 20))
+			};
+            _methods.Add(methodLabel);
+        }
+        private void DrawMethods(Graphics g)
+        {
+            foreach (Label label in _methods)
+                g.DrawString(label.Text, new Font("Segoe UI", 12), Brushes.Black, label.Location);
+        }
+        private void UpdateMethodPositions()
+        {
+            for(int i = 0; i < _methods.Count; i++)
+            {
+				_methods[i].Location = new Point(10, _separator + 10 + (i * 20));
+			}
+        }
         public void UpdateBoxName() => _name = OriginalName;
+
+        private void UpdateSeparator()
+        {
+            if(_labels.Count > 0)
+            {
+                Label lastProperty = _labels.Last();
+                _separator = lastProperty.Location.Y + lastProperty.Height + 10;
+            }
+            else
+            {
+                _separator = (Height * 2) / 9;
+            }
+
+            UpdateMethodPositions();
+        }
     }
 }

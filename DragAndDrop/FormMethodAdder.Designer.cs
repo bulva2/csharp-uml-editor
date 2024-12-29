@@ -248,6 +248,7 @@
 			// 
 			method_accessModifierCB.Anchor = AnchorStyles.Left | AnchorStyles.Right;
 			method_accessModifierCB.FormattingEnabled = true;
+			method_accessModifierCB.Items.AddRange(new object[] { "public", "protected", "private" });
 			method_accessModifierCB.Location = new Point(128, 5);
 			method_accessModifierCB.Name = "method_accessModifierCB";
 			method_accessModifierCB.Size = new Size(497, 23);
