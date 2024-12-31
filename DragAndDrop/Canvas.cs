@@ -1,4 +1,5 @@
 ﻿using DragAndDrop.Boxes;
+using System.Reflection.Metadata.Ecma335;
 
 namespace DragAndDrop
 {
@@ -27,9 +28,10 @@ namespace DragAndDrop
             foreach (Box box in _boxes)
             {
                 box.Draw(g);
-				foreach (var (b1, b2) in _connections)
+				using(Pen p = new Pen(Color.Black, 2))
+                foreach (var (b1, b2) in _connections)
 				{
-                    box.DrawLine(b1, b2, g);
+                        CheckLines(b1, b2, g, p);
 				}
 			}
         }
@@ -121,5 +123,32 @@ namespace DragAndDrop
         {
             _connections.Add((b1, b2));
         }
+        public void CheckLines(Box b1, Box b2, Graphics g, Pen p)
+        {
+			foreach (Box box in _boxes)
+            {
+                if (b1.PositionX < b2.PositionX && b1.PositionX + b1.Width <=  b2.PositionX)
+                {
+                    box.DrawLineB1LeftB2(b1, b2, g, p);
+                    return;
+                }
+                else if (b1.PositionX > b2.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
+                {
+                    box.DrawLineB1RightB2(b1, b2, g, p);
+                    return;
+                }
+                else if (b1.PositionY < b2.PositionY)
+                {
+                    box.DrawLineB1OverB2(b1, b2, g, p);
+                    return;
+                }
+                else if (b1.PositionY > b2.PositionY)
+                {
+                    box.DrawLineB1UnderB2(b1, b2, g, p);
+                    return;
+                }
+                return;
+			}
+		}
     }
 }

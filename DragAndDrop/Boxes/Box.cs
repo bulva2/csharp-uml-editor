@@ -201,15 +201,56 @@
             return $"{OriginalName}";
         }
 
+        /*
         public void DrawLine(Box b1, Box b2, Graphics g)
         {
-			//defaultní lines - jdou od středu boxu
+            //defaultní lines - jdou od středu boxu
+            if(b1.PositionX < b2.PositionX)
+            {
+                Point p1 = new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2);
+				Point p2 = new Point(b2.PositionX, b2.PositionY + b2.Height / 2);
+
+			}
+            
             Point center1 = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height / 2);
 			Point center2 = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height / 2);
 
 			Pen p = new Pen(Color.Black, 2);
 
 			g.DrawLine(p, center1, center2);
+		}
+        */
+
+        public void DrawLineB1RightB2(Box b1, Box b2, Graphics g, Pen p)
+        {
+			Point p1 = new Point(b1.PositionX/* + b1.Width*/, b1.PositionY + b1.Height / 2);
+			Point p2 = new Point(b2.PositionX + b2.Width, b2.PositionY + b2.Height / 2);
+
+			g.DrawLine(p, p1, p2);
+		}
+
+        public void DrawLineB1LeftB2(Box b1, Box b2, Graphics g, Pen p)
+		{
+			Point p1 = new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2);
+			Point p2 = new Point(b2.PositionX, b2.PositionY + b2.Height / 2);
+
+			g.DrawLine(p, p1, p2);
+		}
+
+        public void DrawLineB1OverB2(Box b1, Box b2, Graphics g, Pen p)
+		{
+			Point p1 = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height);
+			Point p2 = new Point(b2.PositionX + b2.Width / 2, b2.PositionY);
+
+			g.DrawLine(p, p1, p2);
+		}
+
+        public void DrawLineB1UnderB2(Box b1, Box b2, Graphics g, Pen p)
+		{
+			Point p1 = new Point(b1.PositionX + b1.Width / 2, b1.PositionY );
+			Point p2 = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b1.Height);
+
+			g.DrawLine(p, p1, p2);
 		}
 	}
 }
