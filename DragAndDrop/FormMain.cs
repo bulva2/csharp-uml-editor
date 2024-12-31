@@ -276,7 +276,7 @@ namespace DragAndDrop
 			FormMethodAdder formMethodAdder = new FormMethodAdder();
 			DialogResult result = formMethodAdder.ShowDialog();
 
-			if(result == DialogResult.OK)
+			if (result == DialogResult.OK)
 			{
 				string name = formMethodAdder.methodName;
 				string returnType = formMethodAdder.returnType;
@@ -286,6 +286,17 @@ namespace DragAndDrop
 				string method = $"{modifier}{name}({args}): {returnType}";
 				_selectedBox.AddMethod(method);
 				pictureBox.Refresh();
+			}
+		}
+
+		private void addLineToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if(_selectedBox == null) return;
+			FormAddLine formAddLine = new FormAddLine(_selectedBox, _canvas._boxes);
+			
+			if(formAddLine.ShowDialog() == DialogResult.OK && formAddLine._targetBox != null)
+			{
+				_canvas.AddConnection(_selectedBox, formAddLine._targetBox);
 			}
 		}
 	}

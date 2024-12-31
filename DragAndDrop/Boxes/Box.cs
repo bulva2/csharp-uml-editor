@@ -54,7 +54,7 @@
         public virtual void Unselect()
         {
             _color = Brushes.LightSkyBlue;
-            _name =  OriginalName;
+            _name = OriginalName;
         }
 
         public void Move(int x, int y)
@@ -101,12 +101,12 @@
 
             DrawProperties(g);
 
-			using (Pen pen = new Pen(Color.Black, 1))
-			{
-				g.DrawLine(pen, 0, _separator, Width, _separator);
-			}
+            using (Pen pen = new Pen(Color.Black, 1))
+            {
+                g.DrawLine(pen, 0, _separator, Width, _separator);
+            }
 
-			DrawMethods(g);
+            DrawMethods(g);
 
             // Reset coords
             g.ResetTransform();
@@ -165,7 +165,7 @@
                 Text = method,
                 AutoSize = true,
                 Location = new Point(10, _separator + 10 + (_methods.Count * 20))
-			};
+            };
             _methods.Add(methodLabel);
         }
         private void DrawMethods(Graphics g)
@@ -175,16 +175,16 @@
         }
         private void UpdateMethodPositions()
         {
-            for(int i = 0; i < _methods.Count; i++)
+            for (int i = 0; i < _methods.Count; i++)
             {
-				_methods[i].Location = new Point(10, _separator + 10 + (i * 20));
-			}
+                _methods[i].Location = new Point(10, _separator + 10 + (i * 20));
+            }
         }
         public void UpdateBoxName() => _name = OriginalName;
 
         private void UpdateSeparator()
         {
-            if(_labels.Count > 0)
+            if (_labels.Count > 0)
             {
                 Label lastProperty = _labels.Last();
                 _separator = lastProperty.Location.Y + lastProperty.Height + 10;
@@ -196,5 +196,20 @@
 
             UpdateMethodPositions();
         }
-    }
+        public override string ToString()
+        {
+            return $"{OriginalName}";
+        }
+
+        public void DrawLine(Box b1, Box b2, Graphics g)
+        {
+			//defaultní lines - jdou od středu boxu
+            Point center1 = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height / 2);
+			Point center2 = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height / 2);
+
+			Pen p = new Pen(Color.Black, 2);
+
+			g.DrawLine(p, center1, center2);
+		}
+	}
 }

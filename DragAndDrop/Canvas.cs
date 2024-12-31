@@ -4,9 +4,10 @@ namespace DragAndDrop
 {
     public class Canvas
     {
-        private List<Box> _boxes;
+        public List<Box> _boxes;
         private Selection? _selection;
         private ListManipulator<Box> _manipulator;
+        private List<(Box, Box)> _connections = new List<(Box, Box)>();
 
         public Canvas()
         {
@@ -24,7 +25,13 @@ namespace DragAndDrop
         public void Draw(Graphics g)
         {
             foreach (Box box in _boxes)
+            {
                 box.Draw(g);
+				foreach (var (b1, b2) in _connections)
+				{
+                    box.DrawLine(b1, b2, g);
+				}
+			}
         }
 
         public Box? SelectRC(int x, int y)
@@ -109,6 +116,10 @@ namespace DragAndDrop
         public bool DoesBoxNameExist(string name)
         {
             return _boxes.Exists(box => box.OriginalName == name);
+        }
+        public void AddConnection(Box b1, Box b2)
+        {
+            _connections.Add((b1, b2));
         }
     }
 }
