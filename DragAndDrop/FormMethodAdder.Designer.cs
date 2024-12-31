@@ -272,8 +272,10 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(634, 261);
 			Controls.Add(tableLayoutPanel1);
+			FormBorderStyle = FormBorderStyle.FixedDialog;
 			Name = "FormMethodAdder";
-			Text = "FormMethodAdder";
+			Text = "Add new method";
+			Load += FormMethodAdder_Load;
 			tableLayoutPanel1.ResumeLayout(false);
 			tableLayoutPanel1.PerformLayout();
 			tableLayoutPanel2.ResumeLayout(false);

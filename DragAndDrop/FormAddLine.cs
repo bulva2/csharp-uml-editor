@@ -18,7 +18,17 @@ namespace DragAndDrop
 		{
 			InitializeComponent();
 
-			foreach(Box box in boxes)
+			line_sourceClassRelationCB.Enabled = false;
+			line_tgtClassRelationCB.Enabled = false;
+			
+			line_sourceClassRelationRB.CheckedChanged += CheckChangedRadios;
+			line_tgtClassRelationRB.CheckedChanged += CheckChangedRadios;
+			line_noRelationRB.CheckedChanged += CheckChangedRadios;
+
+			line_noRelationRB.Enabled = true;
+
+			//add boxes to combobox
+			foreach (Box box in boxes)
 			{
 				if(box!= baseBox)
 					line_TargetBoxCB.Items.Add(box);
@@ -33,6 +43,25 @@ namespace DragAndDrop
 				DialogResult result = DialogResult.OK;
 				Close();
 			};
+		}
+
+		private void CheckChangedRadios(object sender, EventArgs e)
+		{
+			if (line_sourceClassRelationRB.Checked)
+			{
+				line_sourceClassRelationCB.Enabled = true;
+				line_tgtClassRelationCB.Enabled = false;
+			}
+			else if (line_tgtClassRelationRB.Checked)
+			{
+				line_sourceClassRelationCB.Enabled = false;
+				line_tgtClassRelationCB.Enabled = true;
+			}
+			else if (line_noRelationRB.Checked)
+			{
+				line_sourceClassRelationCB.Enabled = false;
+				line_tgtClassRelationCB.Enabled = false;
+			}
 		}
 	}
 }

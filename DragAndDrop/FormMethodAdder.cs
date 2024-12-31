@@ -36,5 +36,10 @@ namespace DragAndDrop
 
 			DialogResult = DialogResult.OK;
 		}
+
+		private void FormMethodAdder_Load(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
