@@ -1,4 +1,6 @@
-﻿namespace DragAndDrop.Boxes
+﻿using System.Text.Json.Serialization;
+
+namespace DragAndDrop.Boxes
 {
     public abstract class Box
     {
@@ -15,12 +17,19 @@
         public int MaxHeight => 360;
 
         protected StringFormat _formatCenter;
+
         protected Brush _color;
+
         protected string _name;
 
         protected List<Label> _labels;
         protected List<Label> _methods;
 
+        public List<string> labelsText => _labels.Select(l => l.Text).ToList();
+        public List<string> methodsText => _methods.Select(l => l.Text).ToList();
+        public string colorName => _color.ToString()!;
+
+        [JsonInclude]
         private int _separator = 0;
 
         public Box(int x, int y, string name)

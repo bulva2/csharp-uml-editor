@@ -13,7 +13,7 @@ namespace DragAndDrop
 {
 	public partial class FormAddLine : Form
 	{
-		public Box _targetBox;
+		public Box? _targetBox;
 		public FormAddLine(Box baseBox, List<Box> boxes)
 		{
 			InitializeComponent();
@@ -40,12 +40,12 @@ namespace DragAndDrop
 					return;
 
 				_targetBox = (Box)line_TargetBoxCB.SelectedItem;
-				DialogResult result = DialogResult.OK;
+				DialogResult = DialogResult.OK;
 				Close();
 			};
 		}
 
-		private void CheckChangedRadios(object sender, EventArgs e)
+		private void CheckChangedRadios(object? sender, EventArgs e)
 		{
 			if (line_sourceClassRelationRB.Checked)
 			{

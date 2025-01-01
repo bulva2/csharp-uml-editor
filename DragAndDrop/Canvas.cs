@@ -5,7 +5,7 @@ namespace DragAndDrop
 {
     public class Canvas
     {
-        public List<Box> _boxes;
+        private List<Box> _boxes;
         private Selection? _selection;
         private ListManipulator<Box> _manipulator;
         private List<(Box, Box)> _connections = new List<(Box, Box)>();
@@ -110,6 +110,8 @@ namespace DragAndDrop
 
             _selection.Move(x, y);
         }
+
+        public List<Box> GetBoxes() => _boxes;
 
         public void AddBoxToList(Box box) => _boxes.Add(box);
 
