@@ -14,6 +14,10 @@ namespace DragAndDrop
 	public partial class FormAddLine : Form
 	{
 		public Box? _targetBox;
+
+		public string? _relationship;
+		public string? _relationshipPlace;
+		public bool _isNoneRelation;
 		public FormAddLine(Box baseBox, List<Box> boxes)
 		{
 			InitializeComponent();
@@ -38,6 +42,23 @@ namespace DragAndDrop
 			{
 				if (line_TargetBoxCB.SelectedItem == null)
 					return;
+
+				if (line_sourceClassRelationRB.Checked)
+				{
+					_relationship = line_sourceClassRelationCB.Text;
+					_relationshipPlace = "source";
+					_isNoneRelation = false;
+				}
+				else if (line_tgtClassRelationRB.Checked)
+				{
+					_relationship = line_tgtClassRelationCB.Text;
+					_relationshipPlace = "target";
+					_isNoneRelation = false;
+				}
+				else
+				{
+					_isNoneRelation = true;
+				}
 
 				_targetBox = (Box)line_TargetBoxCB.SelectedItem;
 				DialogResult = DialogResult.OK;

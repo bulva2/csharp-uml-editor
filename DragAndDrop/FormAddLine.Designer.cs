@@ -230,6 +230,7 @@
 			// 
 			line_tgtClassRelationCB.Anchor = AnchorStyles.Left | AnchorStyles.Right;
 			line_tgtClassRelationCB.FormattingEnabled = true;
+			line_tgtClassRelationCB.Items.AddRange(new object[] { "Association", "Agregation", "Composition", "Generalisation" });
 			line_tgtClassRelationCB.Location = new Point(166, 31);
 			line_tgtClassRelationCB.Name = "line_tgtClassRelationCB";
 			line_tgtClassRelationCB.Size = new Size(158, 23);

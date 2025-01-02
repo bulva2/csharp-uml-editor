@@ -98,18 +98,19 @@
 			method_addB.Location = new Point(3, 3);
 			method_addB.Name = "method_addB";
 			method_addB.Size = new Size(151, 28);
-			method_addB.TabIndex = 0;
+			method_addB.TabIndex = 5;
 			method_addB.Text = "Add";
 			method_addB.UseVisualStyleBackColor = true;
 			method_addB.Click += method_addB_Click;
 			// 
 			// method_cancelB
 			// 
+			method_cancelB.DialogResult = DialogResult.Cancel;
 			method_cancelB.Dock = DockStyle.Fill;
 			method_cancelB.Location = new Point(474, 3);
 			method_cancelB.Name = "method_cancelB";
 			method_cancelB.Size = new Size(151, 28);
-			method_cancelB.TabIndex = 1;
+			method_cancelB.TabIndex = 6;
 			method_cancelB.Text = "Cancel";
 			method_cancelB.UseVisualStyleBackColor = true;
 			method_cancelB.Click += method_cancelB_Click;
@@ -147,7 +148,7 @@
 			method_argsTB.Location = new Point(128, 11);
 			method_argsTB.Name = "method_argsTB";
 			method_argsTB.Size = new Size(497, 23);
-			method_argsTB.TabIndex = 1;
+			method_argsTB.TabIndex = 3;
 			// 
 			// tableLayoutPanel4
 			// 
@@ -181,7 +182,7 @@
 			method_returnTypeTB.Location = new Point(128, 11);
 			method_returnTypeTB.Name = "method_returnTypeTB";
 			method_returnTypeTB.Size = new Size(497, 23);
-			method_returnTypeTB.TabIndex = 1;
+			method_returnTypeTB.TabIndex = 2;
 			// 
 			// tableLayoutPanel5
 			// 
@@ -252,7 +253,7 @@
 			method_accessModifierCB.Location = new Point(128, 5);
 			method_accessModifierCB.Name = "method_accessModifierCB";
 			method_accessModifierCB.Size = new Size(497, 23);
-			method_accessModifierCB.TabIndex = 1;
+			method_accessModifierCB.TabIndex = 0;
 			// 
 			// method_headerL
 			// 

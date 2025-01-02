@@ -8,7 +8,7 @@ namespace DragAndDrop
         private List<Box> _boxes;
         private Selection? _selection;
         private ListManipulator<Box> _manipulator;
-        private List<(Box, Box)> _connections = new List<(Box, Box)>();
+        private List<Tuple<Box, Box, string, string>> _con = new List<Tuple<Box, Box, string, string>>();
 
         public Canvas()
         {
@@ -29,10 +29,10 @@ namespace DragAndDrop
             {
                 box.Draw(g);
 				using(Pen p = new Pen(Color.Black, 2))
-                foreach (var (b1, b2) in _connections)
-				{
-                        CheckLines(b1, b2, g, p);
-				}
+                foreach(var(b1, b2, rel, relOrigin) in _con)
+                {
+                    CheckLinesRels(b1, b2, rel, relOrigin, g, p);
+                }
 			}
         }
 
@@ -121,10 +121,22 @@ namespace DragAndDrop
         {
             return _boxes.Exists(box => box.OriginalName == name);
         }
-        public void AddConnection(Box b1, Box b2)
+        public void AddConnection(Box b1, Box b2, string rel, string relOrigin)
         {
-            _connections.Add((b1, b2));
+            //_connections.Add((b1, b2));
+            Tuple<Box, Box, string, string> connection = Tuple.Create(b1, b2, rel, relOrigin);
+            _con.Add(connection);
         }
+        /*
+        public void AddRels(string rel, string relOrigin)
+        {
+            _rels.Add((rel, relOrigin));
+        }
+        public void AddRelationship(Box box)
+        {
+            if(_rels.)
+        }
+        */
         public void CheckLines(Box b1, Box b2, Graphics g, Pen p)
         {
 			foreach (Box box in _boxes)
@@ -132,25 +144,60 @@ namespace DragAndDrop
                 if (b1.PositionX < b2.PositionX && b1.PositionX + b1.Width <=  b2.PositionX)
                 {
                     box.DrawLineB1LeftB2(b1, b2, g, p);
-                    return;
                 }
                 else if (b1.PositionX > b2.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
                 {
                     box.DrawLineB1RightB2(b1, b2, g, p);
-                    return;
                 }
                 else if (b1.PositionY < b2.PositionY)
                 {
                     box.DrawLineB1OverB2(b1, b2, g, p);
-                    return;
                 }
                 else if (b1.PositionY > b2.PositionY)
                 {
                     box.DrawLineB1UnderB2(b1, b2, g, p);
-                    return;
                 }
-                return;
 			}
 		}
+
+        public void CheckLinesRels(Box b1, Box b2, string rel, string relOrigin, Graphics g, Pen p)
+        {
+            foreach (Box box in _boxes)
+            {
+				if (b1.PositionX < b2.PositionX && b1.PositionX + b1.Width <= b2.PositionX)
+				{
+					box.DrawLineB1LeftB2(b1, b2, g, p);
+				}
+				else if (b1.PositionX > b2.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
+				{
+					box.DrawLineB1RightB2(b1, b2, g, p);
+				}
+				else if (b1.PositionY < b2.PositionY)
+				{
+					box.DrawLineB1OverB2(b1, b2, g, p);
+				}
+				else if (b1.PositionY > b2.PositionY)
+				{
+					box.DrawLineB1UnderB2(b1, b2, g, p);
+				}
+
+				if (rel == "Association")
+                {
+                    box.DrawAssociation(b1, b2, g, p, rel, relOrigin);
+                }
+                else if(rel == "Agregation")
+                {
+                    box.DrawAgregation(b1, b2, g, p, rel, relOrigin);
+                }
+                else if(rel == "Composition")
+                {
+                    box.DrawComposition(b1, b2, g, p, rel, relOrigin);
+                }
+                else if(rel == "Generalisation")
+                {
+                    box.DrawGeneralisation(b1, b2, g, p, rel, relOrigin);
+                }
+            }
+        }
     }
 }

@@ -296,10 +296,26 @@ namespace DragAndDrop
             if (_selectedBox == null) return;
             FormAddLine formAddLine = new FormAddLine(_selectedBox, _canvas.GetBoxes());
 
+            string relationship = "";
+            string relationshipPlace = "";
+            
             if (formAddLine.ShowDialog() == DialogResult.OK && formAddLine._targetBox != null)
             {
-                _canvas.AddConnection(_selectedBox, formAddLine._targetBox);
-            }
+                if(formAddLine._isNoneRelation == false)
+                {
+                    if (string.IsNullOrEmpty(formAddLine._relationship))
+                        return;
+                    relationship = formAddLine._relationship;
+
+					if (string.IsNullOrEmpty(formAddLine._relationshipPlace))
+						return;
+					relationshipPlace = formAddLine._relationshipPlace;
+
+					_canvas.AddConnection(_selectedBox, formAddLine._targetBox, relationship, relationshipPlace);
+				}
+                else
+					_canvas.AddConnection(_selectedBox, formAddLine._targetBox, relationship, relationshipPlace);
+			}
         }
 
         private void jSONFileToolStripMenuItem_Click(object sender, EventArgs e)

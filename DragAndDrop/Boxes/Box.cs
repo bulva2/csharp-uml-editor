@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Drawing;
+using System.Text.Json.Serialization;
 
 namespace DragAndDrop.Boxes
 {
@@ -86,9 +87,13 @@ namespace DragAndDrop.Boxes
             if (h > MaxHeight)
                 h = MaxHeight;
 
+            _separator = h - Height + ((Height * 2) / 9) + (_labels.Count * 20) + 10;
+            
             Width = w;
             Height = h;
 
+            
+            
             UpdateLabelPositions();
             UpdateMethodPositions();
         }
@@ -110,10 +115,7 @@ namespace DragAndDrop.Boxes
 
             DrawProperties(g);
 
-            using (Pen pen = new Pen(Color.Black, 1))
-            {
-                g.DrawLine(pen, 0, _separator, Width, _separator);
-            }
+            
 
             DrawMethods(g);
 
@@ -176,17 +178,24 @@ namespace DragAndDrop.Boxes
                 Location = new Point(10, _separator + 10 + (_methods.Count * 20))
             };
             _methods.Add(methodLabel);
+
+
         }
         private void DrawMethods(Graphics g)
         {
-            foreach (Label label in _methods)
+			using (Pen pen = new Pen(Color.Black, 1))
+			{
+				g.DrawLine(pen, 0, _separator, Width, _separator);
+			}
+
+			foreach (Label label in _methods)
                 g.DrawString(label.Text, new Font("Segoe UI", 12), Brushes.Black, label.Location);
         }
         private void UpdateMethodPositions()
         {
             for (int i = 0; i < _methods.Count; i++)
             {
-                _methods[i].Location = new Point(10, _separator + 10 + (i * 20));
+                _methods[i].Location = new Point(10, (_separator) + 10 + (_methods.Count + i * 20));
             }
         }
         public void UpdateBoxName() => _name = OriginalName;
@@ -260,6 +269,729 @@ namespace DragAndDrop.Boxes
 			Point p2 = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b1.Height);
 
 			g.DrawLine(p, p1, p2);
+		}
+        public void DrawAssociation(Box b1, Box b2, Graphics g, Pen p, string rel, string relOrigin)
+        {
+
+        }
+        public void DrawAgregation(Box b1, Box b2, Graphics g, Pen p, string rel, string relOrigin)
+        {
+			if (relOrigin == "source")
+			{
+				//b1<>-- b2
+				if (b1.PositionX < b2.PositionX && b1.PositionX + b1.Width <= b2.PositionX)
+				{
+					Point[] points =
+					{
+						new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2), //left
+						new Point(b1.PositionX + b1.Width + 15, b1.PositionY + b1.Height / 2 + 8), //top
+                        new Point(b1.PositionX + b1.Width  + 30, b1.PositionY + b1.Height / 2), //right
+                        new Point(b1.PositionX + b1.Width + 15, b1.PositionY + b1.Height / 2 -8) //bottom
+					};
+					Point rotatePoint = new Point(b2.PositionX, b2.PositionY + b2.Height / 2);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.DrawPolygon(p, rotatedPts);
+				}
+
+				//b2--<>b1
+				else if (b1.PositionX > b2.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
+				{
+					Point[] points =
+					{
+						new Point(b1.PositionX, b1.PositionY + b1.Height / 2), //left
+						new Point(b1.PositionX - 15, b1.PositionY + b1.Height / 2 + 8), //top
+                        new Point(b1.PositionX - 30, b1.PositionY + b1.Height / 2), //right
+                        new Point(b1.PositionX - 15, b1.PositionY + b1.Height / 2 -8) //bottom
+					};
+					Point rotatePoint = new Point(b2.PositionX + b2.Width, b2.PositionY + b2.Height / 2);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += Math.PI;
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.DrawPolygon(p, rotatedPts);
+				}
+
+				//b1^b2
+				else if (b1.PositionY < b2.PositionY)
+				{
+					Point[] points =
+					{
+						new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height), //left
+						new Point(b1.PositionX + b1.Width / 2 + 8, b1.PositionY + b1.Height + 15), //top
+                        new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height + 30), //right
+                        new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY + b1.Height +15) //bottom
+					};
+					Point rotatePoint = new Point(b2.PositionX + b2.Width / 2, b2.PositionY);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += (270 * (Math.PI / 180));
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.DrawPolygon(p, rotatedPts);
+				}
+				//b1ˇb2
+				else if (b1.PositionY > b2.PositionY)
+				{
+					Point[] points =
+					{
+						new Point(b1.PositionX + b1.Width / 2, b1.PositionY), //left
+						new Point(b1.PositionX + b1.Width / 2 + 8, b1.PositionY - 15), //top
+                        new Point(b1.PositionX + b1.Width / 2, b1.PositionY - 30), //right
+                        new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY -15) //bottom
+					};
+					Point rotatePoint = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += (90 * (Math.PI / 180));
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.DrawPolygon(p, rotatedPts);
+				}
+
+			}
+			else if (relOrigin == "target")
+			{
+				//b2<>-- b1
+				if (b2.PositionX < b1.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
+				{
+					Point[] points =
+					{
+						new Point(b2.PositionX + b2.Width, b2.PositionY + b2.Height / 2), //left
+						new Point(b2.PositionX + b2.Width + 15, b2.PositionY + b2.Height / 2 + 8), //top
+                        new Point(b2.PositionX + b2.Width  + 30, b2.PositionY + b2.Height / 2), //right
+                        new Point(b2.PositionX + b2.Width + 15, b2.PositionY + b2.Height / 2 -8) //bottom
+					};
+					Point rotatePoint = new Point(b1.PositionX, b1.PositionY + b1.Height / 2);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.DrawPolygon(p, rotatedPts);
+				}
+
+				//b1--<>b2
+				else if (b2.PositionX > b1.PositionX && b1.PositionX + b1.Width <= b2.PositionX)
+				{
+					Point[] points =
+					{
+						new Point(b2.PositionX, b2.PositionY + b2.Height / 2), //left
+						new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 + 8), //top
+                        new Point(b2.PositionX - 30, b2.PositionY + b2.Height / 2), //right
+                        new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 -8) //bottom
+					};
+					Point rotatePoint = new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += Math.PI;
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.DrawPolygon(p, rotatedPts);
+				}
+
+				//b2^b1
+				else if (b2.PositionY < b1.PositionY)
+				{
+					Point[] points =
+					{
+						new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height), //left
+						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY + b2.Height + 15), //top
+                        new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height + 30), //right
+                        new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY + b2.Height +15) //bottom
+					};
+					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += (270 * (Math.PI / 180));
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.DrawPolygon(p, rotatedPts);
+				}
+				//b2ˇb1
+				else if (b2.PositionY > b1.PositionY)
+				{
+					Point[] points =
+					{
+						new Point(b2.PositionX + b2.Width / 2, b2.PositionY), //left
+						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY - 15), //top
+                        new Point(b2.PositionX + b2.Width / 2, b2.PositionY - 30), //right
+                        new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY -15) //bottom
+					};
+					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += (90 * (Math.PI / 180));
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.DrawPolygon(p, rotatedPts);
+				}
+			}
+		}
+        
+        public void DrawComposition(Box b1, Box b2, Graphics g, Pen p, string rel, string relOrigin)
+        {
+            Brush b = new SolidBrush(Color.Black);
+            if (relOrigin == "source")
+			{
+				//b1<>-- b2
+				if (b1.PositionX < b2.PositionX && b1.PositionX + b1.Width <= b2.PositionX)
+				{
+					Point[] points =
+					{
+						new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2), //left
+						new Point(b1.PositionX + b1.Width + 15, b1.PositionY + b1.Height / 2 + 8), //top
+                        new Point(b1.PositionX + b1.Width  + 30, b1.PositionY + b1.Height / 2), //right
+                        new Point(b1.PositionX + b1.Width + 15, b1.PositionY + b1.Height / 2 -8) //bottom
+					};
+					Point rotatePoint = new Point(b2.PositionX, b2.PositionY + b2.Height / 2);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+
+				//b2--<>b1
+				else if (b1.PositionX > b2.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
+				{
+					Point[] points =
+					{
+						new Point(b1.PositionX, b1.PositionY + b1.Height / 2), //left
+						new Point(b1.PositionX - 15, b1.PositionY + b1.Height / 2 + 8), //top
+                        new Point(b1.PositionX - 30, b1.PositionY + b1.Height / 2), //right
+                        new Point(b1.PositionX - 15, b1.PositionY + b1.Height / 2 -8) //bottom
+					};
+					Point rotatePoint = new Point(b2.PositionX + b2.Width, b2.PositionY + b2.Height / 2);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += Math.PI;
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+
+				//b1^b2
+				else if (b1.PositionY < b2.PositionY)
+				{
+					Point[] points =
+					{
+						new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height), //left
+						new Point(b1.PositionX + b1.Width / 2 + 8, b1.PositionY + b1.Height + 15), //top
+                        new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height + 30), //right
+                        new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY + b1.Height +15) //bottom
+					};
+					Point rotatePoint = new Point(b2.PositionX + b2.Width / 2, b2.PositionY);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += (270 * (Math.PI / 180));
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+				//b1ˇb2
+				else if (b1.PositionY > b2.PositionY)
+				{
+					Point[] points =
+					{
+						new Point(b1.PositionX + b1.Width / 2, b1.PositionY), //left
+						new Point(b1.PositionX + b1.Width / 2 + 8, b1.PositionY - 15), //top
+                        new Point(b1.PositionX + b1.Width / 2, b1.PositionY - 30), //right
+                        new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY -15) //bottom
+					};
+					Point rotatePoint = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += (90 * (Math.PI / 180));
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+
+			}
+			else if (relOrigin == "target")
+			{
+				//b2<>-- b1
+				if (b2.PositionX < b1.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
+				{
+					Point[] points =
+					{
+						new Point(b2.PositionX + b2.Width, b2.PositionY + b2.Height / 2), //left
+						new Point(b2.PositionX + b2.Width + 15, b2.PositionY + b2.Height / 2 + 8), //top
+                        new Point(b2.PositionX + b2.Width  + 30, b2.PositionY + b2.Height / 2), //right
+                        new Point(b2.PositionX + b2.Width + 15, b2.PositionY + b2.Height / 2 -8) //bottom
+					};
+					Point rotatePoint = new Point(b1.PositionX, b1.PositionY + b1.Height / 2);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+
+				//b1--<>b2
+				else if (b2.PositionX > b1.PositionX && b1.PositionX + b1.Width <= b2.PositionX)
+				{
+					Point[] points =
+					{
+						new Point(b2.PositionX, b2.PositionY + b2.Height / 2), //left
+						new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 + 8), //top
+                        new Point(b2.PositionX - 30, b2.PositionY + b2.Height / 2), //right
+                        new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 -8) //bottom
+					};
+					Point rotatePoint = new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += Math.PI;
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+
+				//b2^b1
+				else if (b2.PositionY < b1.PositionY)
+				{
+					Point[] points =
+					{
+						new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height), //left
+						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY + b2.Height + 15), //top
+                        new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height + 30), //right
+                        new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY + b2.Height +15) //bottom
+					};
+					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += (270 * (Math.PI / 180));
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+				//b2ˇb1
+				else if (b2.PositionY > b1.PositionY)
+				{
+					Point[] points =
+					{
+						new Point(b2.PositionX + b2.Width / 2, b2.PositionY), //left
+						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY - 15), //top
+                        new Point(b2.PositionX + b2.Width / 2, b2.PositionY - 30), //right
+                        new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY -15) //bottom
+					};
+					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += (90 * (Math.PI / 180));
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+					Point rotPt3 = RotatePoint(points[3], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2,
+						rotPt3
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+			}
+		}
+        
+        // ! přizpůsobit origin šipek středu stran a ne středu boxu - špatně se vykresluje úhel
+		public void DrawGeneralisation(Box b1, Box b2, Graphics g, Pen p, string rel, string relOrigin)
+        {
+			Brush b = new SolidBrush(Color.Black);
+			if (relOrigin == "source")
+			{
+				//b1<|-- b2
+				if (b1.PositionX < b2.PositionX && b1.PositionX + b1.Width <= b2.PositionX)
+				{
+					Point[] points =
+					{
+						new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2),
+						new Point(b1.PositionX + b1.Width + 15, b1.PositionY + b1.Height / 2 + 8),
+                        new Point(b1.PositionX + b1.Width + 15, b1.PositionY + b1.Height / 2 -8)
+					};
+
+					Point rotatePoint = new Point(b2.PositionX, b2.PositionY + b2.Height / 2);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+
+				//b2--|>b1
+				else if (b1.PositionX > b2.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
+				{
+					Point[] points =
+					{
+						new Point(b1.PositionX, b1.PositionY + b1.Height / 2),
+						new Point(b1.PositionX - 15, b1.PositionY + b1.Height / 2 + 8), 
+                        new Point(b1.PositionX - 15, b1.PositionY + b1.Height / 2 -8)
+					};
+					Point rotatePoint = new Point(b2.PositionX + b2.Width, b2.PositionY + b2.Height / 2);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += Math.PI;
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+
+				//b1^b2
+				else if (b1.PositionY < b2.PositionY)
+				{
+					Point[] points =
+					{
+						new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height),
+						new Point(b1.PositionX + b1.Width / 2 + 8, b1.PositionY + b1.Height + 15),
+                        new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY + b1.Height +15) 
+					};
+					Point rotatePoint = new Point(b2.PositionX + b2.Width/2, b2.PositionY);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					
+					angle += (270 * (Math.PI / 180));
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+				//b1ˇb2
+				else if (b1.PositionY > b2.PositionY)
+				{					
+					Point[] points =
+					{
+						new Point(b1.PositionX + b1.Width / 2, b1.PositionY), //left
+						new Point(b1.PositionX + b1.Width / 2 + 8, b1.PositionY - 15), //top
+                        new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY -15) //bottom
+					};
+					Point rotatePoint = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += (90 * (Math.PI / 180));
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+
+			}
+			else if (relOrigin == "target")
+			{
+				//b2<>-- b1
+				if (b2.PositionX < b1.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
+				{
+					Point[] points =
+					{
+						new Point(b2.PositionX + b2.Width, b2.PositionY + b2.Height / 2), //left
+						new Point(b2.PositionX + b2.Width + 15, b2.PositionY + b2.Height / 2 + 8), //top
+                        new Point(b2.PositionX + b2.Width + 15, b2.PositionY + b2.Height / 2 -8) //bottom
+					};
+					Point rotatePoint = new Point(b1.PositionX, b1.PositionY + b1.Height / 2);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+
+				//b1--<>b2
+				else if (b2.PositionX > b1.PositionX && b1.PositionX + b1.Width <= b2.PositionX)
+				{
+					Point[] points =
+					{
+						new Point(b2.PositionX, b2.PositionY + b2.Height / 2), //left
+						new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 + 8), //top
+                        new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 -8) //bottom
+					};
+					Point rotatePoint = new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += Math.PI;
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2
+					};
+					g.FillPolygon(b, rotatedPts);
+				}
+
+				//b2^b1
+				else if (b2.PositionY < b1.PositionY)
+				{
+					Point[] points =
+					{
+						new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height), //left
+						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY + b2.Height + 15), //top
+                        new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY + b2.Height +15) //bottom
+					};
+					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+
+					angle += (270 * (Math.PI / 180));
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+				//b2ˇb1
+				else if (b2.PositionY > b1.PositionY)
+				{
+					Point[] points =
+					{
+						new Point(b2.PositionX + b2.Width / 2, b2.PositionY), //left
+						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY - 15), //top
+                        new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY -15) //bottom
+					};
+					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height);
+
+					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
+					angle += (90 * (Math.PI / 180));
+
+					Point rotPt1 = RotatePoint(points[1], points[0], angle);
+					Point rotPt2 = RotatePoint(points[2], points[0], angle);
+
+					Point[] rotatedPts =
+					{
+						points[0],
+						rotPt1,
+						rotPt2
+					};
+
+					g.FillPolygon(b, rotatedPts);
+				}
+			}
+		}
+		private Point RotatePoint(Point pt, Point pivot, double angle)
+		{
+			int x = pivot.X + (int)((pt.X - pivot.X) * Math.Cos(angle) - (pt.Y - pivot.Y) * Math.Sin(angle));
+			int y = pivot.Y + (int)((pt.X - pivot.X) * Math.Sin(angle) + (pt.Y - pivot.Y) * Math.Cos(angle));
+			return new Point(x, y);
 		}
 	}
 }
