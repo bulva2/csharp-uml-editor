@@ -1,4 +1,4 @@
-using DragAndDrop.Boxes;
+﻿using DragAndDrop.Boxes;
 using DragAndDrop.Enums;
 using System.Drawing.Imaging;
 using System.Text.Json;
@@ -49,8 +49,6 @@ namespace DragAndDrop
             {
                 Point point = new Point(e.X, e.Y);
                 Box? clickedBox = _canvas.SelectRC(point.X, point.Y);
-
-                Console.WriteLine(clickedBox);
 
                 if (clickedBox == null)
                 {
@@ -279,7 +277,7 @@ namespace DragAndDrop
 
             if (result == DialogResult.OK)
             {
-                // P�idat errorProvider na formMethodAdder
+                // Přidat errorProvider na formMethodAdder
                 string name = formMethodAdder.methodName!;
                 string returnType = formMethodAdder.returnType!;
                 string args = formMethodAdder.arguments!;
@@ -332,6 +330,68 @@ namespace DragAndDrop
                 string json = JsonSerializer.Serialize(_canvas.GetBoxes(), options);
                 File.WriteAllText(path, json);
                 MessageBox.Show($"JSON file saved successfully!\nLocation: {path}");
+            }
+        }
+
+        private void newDiagramToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _selectedBox = null;
+            _canvas = new Canvas();
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openFileDialogJson.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                string path = openFileDialogJson.FileName;
+                DeserializeBoxesFromJSON(path);
+            }
+        }
+
+        private void DeserializeBoxesFromJSON(string path)
+        {
+            string json = File.ReadAllText(path);
+
+            try
+            {
+                // Parsneme si JSON, tak abychom zjistili o jakej box se jedná
+                JsonDocument jsonDocument = JsonDocument.Parse(json);
+
+                foreach (JsonElement element in jsonDocument.RootElement.EnumerateArray())
+                {
+                    string boxType = element.GetProperty("BoxType").GetString()!;
+
+                    JsonSerializerOptions options = new JsonSerializerOptions
+                    {
+                        IncludeFields = true,
+                    };
+
+                    Box? box = boxType switch
+                    {
+                        "Class" => JsonSerializer.Deserialize<ClassBox>(element, options),
+                        "Abstract" => JsonSerializer.Deserialize<AbstractClassBox>(element, options),
+                        "Interface" => JsonSerializer.Deserialize<InterfaceBox>(element, options),
+                        _ => throw new JsonException($"Unknown box type: {boxType}")
+                    };
+
+                    if (box != null)
+                    {
+                        if (!_canvas.DoesBoxNameExist(box.OriginalName))
+                        {
+                            _canvas.AddBoxToList(box);
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Box with name {box.OriginalName} already exists in the diagram. Skipping...", "JSON Import Progress", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Error while deserializing JSON file!\n\nError message: {e.Message}", "JSON Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

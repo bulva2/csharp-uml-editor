@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace DragAndDrop.Boxes
 {
 	public class InterfaceBox : Box
 	{
-		public InterfaceBox(int x, int y, string name) : base(x, y, name)
+        public InterfaceBox(int x, int y, string name) : base(x, y, name)
 		{
 			PositionX = x;
 			PositionY = y;
 
 			Width = 180;
 			Height = 180;
-			_color = Brushes.LightCoral;
-			_name = name;
+			ColorBrush = Brushes.LightCoral;
+			Name = name;
 
 			_formatCenter = new StringFormat()
 			{
@@ -25,10 +21,16 @@ namespace DragAndDrop.Boxes
 			};
 		}
 
+		[JsonConstructor]
+        public InterfaceBox(int positionX, int positionY, int width, int height, string originalName, string boxType, List<string> labelsText, List<string> methodsText, string colorName, int separator) : base(positionX, positionY, width, height, originalName, boxType, labelsText, methodsText, colorName, separator)
+        {
+
+        }
+
         public override void Unselect()
         {
-            _color = Brushes.LightCoral;
-			_name = OriginalName;
+            ColorBrush = Brushes.LightCoral;
+			Name = OriginalName;
         }
     }
 }

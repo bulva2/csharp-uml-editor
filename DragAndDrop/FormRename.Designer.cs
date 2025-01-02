@@ -157,6 +157,7 @@
             ClientSize = new Size(384, 111);
             Controls.Add(tableLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "FormRename";
             ShowIcon = false;
             ShowInTaskbar = false;

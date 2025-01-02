@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace DragAndDrop.Boxes
 {
     public class ClassBox : Box
     {
+        public override string BoxType { get; set; } = "Class";
+
         public ClassBox(int x, int y, string name) : base(x, y, name)
         {
             PositionX = x;
@@ -15,14 +13,19 @@ namespace DragAndDrop.Boxes
 
             Width = 180;
             Height = 180;
-            _color = Brushes.LightSkyBlue;
-            _name = name;
+            ColorBrush = Brushes.LightSkyBlue;
+            Name = name;
 
             _formatCenter = new StringFormat()
             {
                 Alignment = StringAlignment.Center,
                 LineAlignment = StringAlignment.Center
             };
+        }
+
+        [JsonConstructor]
+        public ClassBox(int positionX, int positionY, int width, int height, string originalName, string boxType, List<string> labelsText, List<string> methodsText, string colorName, int separator) : base(positionX, positionY, width, height, originalName, boxType, labelsText, methodsText, colorName, separator)
+        {
         }
     }
 }

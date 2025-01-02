@@ -227,6 +227,7 @@
             ClientSize = new Size(584, 216);
             Controls.Add(tableLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             MinimizeBox = false;
             Name = "FormPropertyEdit";
             StartPosition = FormStartPosition.CenterScreen;

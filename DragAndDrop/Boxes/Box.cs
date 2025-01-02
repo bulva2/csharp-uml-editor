@@ -1,37 +1,47 @@
-﻿using System.Drawing;
 using System.Text.Json.Serialization;
 
 namespace DragAndDrop.Boxes
 {
     public abstract class Box
     {
+		[JsonPropertyName("PositionX")]
         public int PositionX { get; set; }
+        [JsonPropertyName("PositionY")]
         public int PositionY { get; set; }
+        [JsonPropertyName("Width")]
         public int Width { get; set; }
+        [JsonPropertyName("Height")]
         public int Height { get; set; }
 
+		[JsonPropertyName("OriginalName")]
         public string OriginalName { get; set; }
 
-        public int MinWidth => 180;
-        public int MinHeight => 180;
-        public int MaxWidth => 360;
-        public int MaxHeight => 360;
+        [JsonPropertyName("BoxType")]
+        public virtual string BoxType { get; set; } = "Box";
+
+        protected int MinWidth => 180;
+        protected int MinHeight => 180;
+        protected int MaxWidth => 360;
+        protected int MaxHeight => 360;
 
         protected StringFormat _formatCenter;
 
-        protected Brush _color;
+        protected Brush ColorBrush;
 
-        protected string _name;
+        protected string Name;
 
         protected List<Label> _labels;
         protected List<Label> _methods;
 
-        public List<string> labelsText => _labels.Select(l => l.Text).ToList();
-        public List<string> methodsText => _methods.Select(l => l.Text).ToList();
-        public string colorName => _color.ToString()!;
+		[JsonPropertyName("LabelsText")]
+        public List<string> LabelsText => _labels.Select(l => l.Text).ToList();
+        [JsonPropertyName("MethodsText")]
+        public List<string> MethodsText => _methods.Select(l => l.Text).ToList();
+        [JsonPropertyName("colorName")]
+        public string colorName => GetColor();
 
-        [JsonInclude]
-        private int _separator = 0;
+		[JsonPropertyName("_separator")]
+        public int Separator = 0;
 
         public Box(int x, int y, string name)
         {
@@ -40,9 +50,9 @@ namespace DragAndDrop.Boxes
 
             Width = 180;
             Height = 180;
-            _color = Brushes.LightSkyBlue;
+            ColorBrush = Brushes.LightSkyBlue;
 
-            _name = name;
+            Name = name;
             OriginalName = name;
 
             _labels = new List<Label>();
@@ -55,16 +65,42 @@ namespace DragAndDrop.Boxes
             };
         }
 
+        [JsonConstructor]
+        public Box(int positionX, int positionY, int width, int height, string originalName, string boxType, List<string> labelsText, List<string> methodsText, string colorName, int separator)
+        {
+            PositionX = positionX;
+            PositionY = positionY;
+            Width = width;
+            Height = height;
+            OriginalName = originalName;
+			BoxType = boxType;
+            Name = originalName;
+            ColorBrush = new SolidBrush(Color.FromName(colorName));
+            Separator = separator;
+
+            _labels = new List<Label>();
+            _methods = new List<Label>();
+
+            _formatCenter = new StringFormat()
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+
+            methodsText.ForEach(AddMethod);
+            labelsText.ForEach(AddProperty);
+        }
+
         public virtual void Select()
         {
-            _color = Brushes.LightBlue;
-            _name = "Selected";
+            ColorBrush = Brushes.LightBlue;
+            Name = "Selected";
         }
 
         public virtual void Unselect()
         {
-            _color = Brushes.LightSkyBlue;
-            _name = OriginalName;
+            ColorBrush = Brushes.LightSkyBlue;
+            Name = OriginalName;
         }
 
         public void Move(int x, int y)
@@ -87,15 +123,19 @@ namespace DragAndDrop.Boxes
             if (h > MaxHeight)
                 h = MaxHeight;
 
-            _separator = h - Height + ((Height * 2) / 9) + (_labels.Count * 20) + 10;
+            Separator = h - Height + ((Height * 2) / 9) + (_labels.Count * 20) + 10;
             
             Width = w;
             Height = h;
 
-            
-            
             UpdateLabelPositions();
             UpdateMethodPositions();
+        }
+
+        private string GetColor()
+        {
+            SolidBrush brush = (SolidBrush)ColorBrush;
+            return brush.Color.Name;
         }
 
         public virtual void Draw(Graphics g)
@@ -104,11 +144,11 @@ namespace DragAndDrop.Boxes
             g.TranslateTransform(PositionX, PositionY);
 
             // Draw Box
-            g.FillRectangle(_color, 0, 0, Width, Height);
+            g.FillRectangle(ColorBrush, 0, 0, Width, Height);
             g.FillRectangle(Brushes.Black, Width - 10, Height - 10, 10, 10);
 
             // Name of the box (Class/Interface Name)
-            g.DrawString(_name, new Font("Segoe UI", 10, FontStyle.Bold), Brushes.Black, Width / 2, Height * 0.1f, _formatCenter);
+            g.DrawString(Name, new Font("Segoe UI", 10, FontStyle.Bold), Brushes.Black, Width / 2, Height * 0.1f, _formatCenter);
 
             // Line under the name
             g.DrawLine(Pens.Black, 0, Height * 0.2f, Width, Height * 0.2f);
@@ -154,13 +194,13 @@ namespace DragAndDrop.Boxes
         }
 
 
-        private void DrawProperties(Graphics g)
+        protected void DrawProperties(Graphics g)
         {
             foreach (Label label in _labels)
                 g.DrawString(label.Text, new Font("Segoe UI", 12), Brushes.Black, label.Location);
         }
 
-        private void UpdateLabelPositions()
+        protected void UpdateLabelPositions()
         {
             for (int i = 0; i < _labels.Count; i++)
             {
@@ -174,29 +214,30 @@ namespace DragAndDrop.Boxes
             {
                 Text = method,
                 AutoSize = true,
-                Location = new Point(10, _separator + 10 + (_methods.Count * 20))
+                Location = new Point(10, Separator + 10 + (_methods.Count * 20))
             };
             _methods.Add(methodLabel);
 
 
         }
-        private void DrawMethods(Graphics g)
+        protected void DrawMethods(Graphics g)
         {
 			using (Pen pen = new Pen(Color.Black, 1))
 			{
-				g.DrawLine(pen, 0, _separator, Width, _separator);
+				g.DrawLine(pen, 0, Separator, Width, Separator);
 			}
 
 			foreach (Label label in _methods)
                 g.DrawString(label.Text, new Font("Segoe UI", 12), Brushes.Black, label.Location);
         }
-        private void UpdateMethodPositions()
+
+        protected void UpdateMethodPositions()
         {
             if(_labels.Count > 0)
 			{
 				for (int i = 0; i < _methods.Count; i++)
 				{
-					_methods[i].Location = new Point(10, (_separator) + 10 + (_methods.Count + i * 20));
+					_methods[i].Location = new Point(10, (Separator) + 10 + (_methods.Count + i * 20));
 				}
 			}
 			else
@@ -208,18 +249,18 @@ namespace DragAndDrop.Boxes
 			}
 			
         }
-        public void UpdateBoxName() => _name = OriginalName;
+        public void UpdateBoxName() => Name = OriginalName;
 
         private void UpdateSeparator()
         {
             if (_labels.Count > 0)
             {
                 Label lastProperty = _labels.Last();
-                _separator = lastProperty.Location.Y + lastProperty.Height + 10;
+                Separator = lastProperty.Location.Y + lastProperty.Height + 10;
             }
             else
             {
-                _separator = (Height * 2) / 9;
+                Separator = (Height * 2) / 9;
             }
 
             UpdateMethodPositions();

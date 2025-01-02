@@ -34,6 +34,7 @@
             newToolStripMenuItem = new ToolStripMenuItem();
             newDiagramToolStripMenuItem = new ToolStripMenuItem();
             loadDiagramToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem2 = new ToolStripMenuItem();
             saveDiagramAsToolStripMenuItem = new ToolStripMenuItem();
             jSONFileToolStripMenuItem = new ToolStripMenuItem();
             pNGFileToolStripMenuItem = new ToolStripMenuItem();
@@ -57,6 +58,7 @@
             saveFileDialogPng = new SaveFileDialog();
             saveFileDialogJpg = new SaveFileDialog();
             saveFileDialogJson = new SaveFileDialog();
+            openFileDialogJson = new OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             menuStrip.SuspendLayout();
             contextMenuStripRC.SuspendLayout();
@@ -98,20 +100,29 @@
             // newDiagramToolStripMenuItem
             // 
             newDiagramToolStripMenuItem.Name = "newDiagramToolStripMenuItem";
-            newDiagramToolStripMenuItem.Size = new Size(162, 22);
+            newDiagramToolStripMenuItem.Size = new Size(180, 22);
             newDiagramToolStripMenuItem.Text = "New Diagram";
+            newDiagramToolStripMenuItem.Click += newDiagramToolStripMenuItem_Click;
             // 
             // loadDiagramToolStripMenuItem
             // 
+            loadDiagramToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem2 });
             loadDiagramToolStripMenuItem.Name = "loadDiagramToolStripMenuItem";
-            loadDiagramToolStripMenuItem.Size = new Size(162, 22);
+            loadDiagramToolStripMenuItem.Size = new Size(180, 22);
             loadDiagramToolStripMenuItem.Text = "Load Diagram";
+            // 
+            // toolStripMenuItem2
+            // 
+            toolStripMenuItem2.Name = "toolStripMenuItem2";
+            toolStripMenuItem2.Size = new Size(180, 22);
+            toolStripMenuItem2.Text = "From JSON";
+            toolStripMenuItem2.Click += toolStripMenuItem2_Click;
             // 
             // saveDiagramAsToolStripMenuItem
             // 
             saveDiagramAsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { jSONFileToolStripMenuItem, pNGFileToolStripMenuItem, toolStripMenuItem1 });
             saveDiagramAsToolStripMenuItem.Name = "saveDiagramAsToolStripMenuItem";
-            saveDiagramAsToolStripMenuItem.Size = new Size(162, 22);
+            saveDiagramAsToolStripMenuItem.Size = new Size(180, 22);
             saveDiagramAsToolStripMenuItem.Text = "Save Diagram As";
             // 
             // jSONFileToolStripMenuItem
@@ -254,6 +265,11 @@
             // 
             saveFileDialogJson.Filter = "JSON File (*.json)|*.json";
             // 
+            // openFileDialogJson
+            // 
+            openFileDialogJson.FileName = "openFileDialogJson";
+            openFileDialogJson.Filter = "JSON File (*.json)|*.json";
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -308,5 +324,7 @@
 		private ToolStripSeparator toolStripSeparator2;
 		private ToolStripMenuItem addLineToolStripMenuItem;
         private SaveFileDialog saveFileDialogJson;
+        private ToolStripMenuItem toolStripMenuItem2;
+        private OpenFileDialog openFileDialogJson;
     }
 }

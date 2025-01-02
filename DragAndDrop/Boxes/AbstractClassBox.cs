@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace DragAndDrop.Boxes
 {
 	public class AbstractClassBox : Box
 	{
-		public AbstractClassBox(int x, int y, string name) : base(x, y, name)
+        public AbstractClassBox(int x, int y, string name) : base(x, y, name)
 		{
 			PositionX = x;
 			PositionY = y;
 
-			Width = 140;
-			Height = 140;
-			_color = Brushes.AliceBlue;
-			_name = name;
+			Width = 180;
+			Height = 180;
+			ColorBrush = Brushes.AliceBlue;
+			Name = name;
 
 			_formatCenter = new StringFormat()
 			{
@@ -24,31 +20,43 @@ namespace DragAndDrop.Boxes
 				LineAlignment = StringAlignment.Center				
 			};
 		}
+
+		[JsonConstructor]
+        public AbstractClassBox(int positionX, int positionY, int width, int height, string originalName, string boxType, List<string> labelsText, List<string> methodsText, string colorName, int separator) : base(positionX, positionY, width, height, originalName, boxType, labelsText, methodsText, colorName, separator)
+        {
+        }
+
+
+
 		public override void Draw(Graphics g)
 		{
 			g.TranslateTransform(PositionX, PositionY);
 
-			g.FillRectangle(_color, 0, 0, Width, Height);
+			g.FillRectangle(ColorBrush, 0, 0, Width, Height);
 			g.FillRectangle(Brushes.Black, Width - 10, Height - 10, 10, 10);
 
 			// Make it bold, just like in UML CD
-			g.DrawString(_name, new Font("Segoe UI", 10, FontStyle.Bold | FontStyle.Italic), Brushes.Black, Width / 2, Height * 0.1f, _formatCenter);
+			g.DrawString(Name, new Font("Segoe UI", 10, FontStyle.Bold | FontStyle.Italic), Brushes.Black, Width / 2, Height * 0.1f, _formatCenter);
 
 			g.DrawLine(Pens.Black, 0, Height * 0.2f, Width, Height * 0.2f);
 
-			g.ResetTransform();
+            DrawProperties(g);
+            DrawMethods(g);
+            UpdateMethodPositions();
+
+            g.ResetTransform();
 		}
 
 		public override void Select()
 		{
-			_color = Brushes.LightBlue;
-			_name = "Selected Abstract!";
+			ColorBrush = Brushes.LightBlue;
+			Name = "Selected Abstract!";
 		}
 
 		public override void Unselect()
 		{
-			_color = Brushes.AliceBlue;
-			_name = OriginalName;
+			ColorBrush = Brushes.AliceBlue;
+			Name = OriginalName;
 		}
 	}
 }
