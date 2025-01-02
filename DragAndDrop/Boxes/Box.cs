@@ -114,10 +114,9 @@ namespace DragAndDrop.Boxes
             g.DrawLine(Pens.Black, 0, Height * 0.2f, Width, Height * 0.2f);
 
             DrawProperties(g);
-
-            
-
             DrawMethods(g);
+
+			UpdateMethodPositions();
 
             // Reset coords
             g.ResetTransform();
@@ -193,10 +192,21 @@ namespace DragAndDrop.Boxes
         }
         private void UpdateMethodPositions()
         {
-            for (int i = 0; i < _methods.Count; i++)
-            {
-                _methods[i].Location = new Point(10, (_separator) + 10 + (_methods.Count + i * 20));
-            }
+            if(_labels.Count > 0)
+			{
+				for (int i = 0; i < _methods.Count; i++)
+				{
+					_methods[i].Location = new Point(10, (_separator) + 10 + (_methods.Count + i * 20));
+				}
+			}
+			else
+			{
+				for(int i = 0; i < _methods.Count; ++i)
+				{
+					_methods[i].Location = new Point(10, ((Height * 2) / 9) + (_labels.Count + i * 20));
+				}
+			}
+			
         }
         public void UpdateBoxName() => _name = OriginalName;
 
@@ -218,27 +228,6 @@ namespace DragAndDrop.Boxes
         {
             return $"{OriginalName}";
         }
-
-        /*
-        public void DrawLine(Box b1, Box b2, Graphics g)
-        {
-            //defaultní lines - jdou od středu boxu
-            if(b1.PositionX < b2.PositionX)
-            {
-                Point p1 = new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2);
-				Point p2 = new Point(b2.PositionX, b2.PositionY + b2.Height / 2);
-
-			}
-            
-            Point center1 = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height / 2);
-			Point center2 = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height / 2);
-
-			Pen p = new Pen(Color.Black, 2);
-
-			g.DrawLine(p, center1, center2);
-		}
-        */
-
         public void DrawLineB1RightB2(Box b1, Box b2, Graphics g, Pen p)
         {
 			Point p1 = new Point(b1.PositionX/* + b1.Width*/, b1.PositionY + b1.Height / 2);
@@ -912,9 +901,9 @@ namespace DragAndDrop.Boxes
 				{
 					Point[] points =
 					{
-						new Point(b2.PositionX, b2.PositionY + b2.Height / 2), //left
-						new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 + 8), //top
-                        new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 -8) //bottom
+						new Point(b2.PositionX, b2.PositionY + b2.Height / 2),
+						new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 + 8), 
+                        new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 -8) 
 					};
 					Point rotatePoint = new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2);
 
@@ -938,9 +927,9 @@ namespace DragAndDrop.Boxes
 				{
 					Point[] points =
 					{
-						new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height), //left
-						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY + b2.Height + 15), //top
-                        new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY + b2.Height +15) //bottom
+						new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height),
+						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY + b2.Height + 15), 
+                        new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY + b2.Height +15)
 					};
 					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY);
 
@@ -964,9 +953,9 @@ namespace DragAndDrop.Boxes
 				{
 					Point[] points =
 					{
-						new Point(b2.PositionX + b2.Width / 2, b2.PositionY), //left
-						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY - 15), //top
-                        new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY -15) //bottom
+						new Point(b2.PositionX + b2.Width / 2, b2.PositionY),
+						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY - 15),
+                        new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY -15)
 					};
 					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height);
 
