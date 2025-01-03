@@ -298,14 +298,24 @@ namespace DragAndDrop
             string relationship = "";
             string relationshipPlace = "";
 
-            string srcCardinality = "";
-            string tgtCardinality = "";
+			string srcCardinality = "";
+			string tgtCardinality = "";
+            
 
-            if (formAddLine.ShowDialog() == DialogResult.OK && formAddLine._targetBox != null)
+            DialogResult result = formAddLine.ShowDialog();
+
+            if (result == DialogResult.OK /*&& formAddLine._targetBox != null*/)
             {
-				srcCardinality = formAddLine.srcClassCardinality;
+                if (formAddLine.srcClassCardinality == null)
+                    return;
+                else if(formAddLine.srcClassCardinality != "none")
+                    srcCardinality = formAddLine.srcClassCardinality;
 
-				tgtCardinality = formAddLine.tgtClassCardinality;
+                if (formAddLine.tgtClassCardinality == null)
+                    return;
+                else if(formAddLine.tgtClassCardinality != "none")
+                    tgtCardinality = formAddLine.tgtClassCardinality;
+
 
 				if (formAddLine._isNoneRelation == false)
                 {
