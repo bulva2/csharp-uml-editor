@@ -273,36 +273,68 @@ namespace DragAndDrop.Boxes
         }
         public void DrawLineB1RightB2(Box b1, Box b2, Graphics g, Pen p)
         {
-			Point p1 = new Point(b1.PositionX/* + b1.Width*/, b1.PositionY + b1.Height / 2);
+			int distanceX = b1.PositionX - b2.PositionX + b2.Width;
+			Point p1 = new Point(b1.PositionX, b1.PositionY + b1.Height / 2);
 			Point p2 = new Point(b2.PositionX + b2.Width, b2.PositionY + b2.Height / 2);
 
-			g.DrawLine(p, p1, p2);
+			Point pt1 = new Point(b2.PositionX + (distanceX / 2), b2.PositionY + (b2.Height / 2));
+			Point pt2 = new Point(b1.PositionX - (distanceX / 2) + b1.Width, b1.PositionY + (b1.Height / 2));
+
+			g.DrawLine(p, p1, pt2);
+			g.DrawLine(p, pt2, pt1);
+			g.DrawLine(p, p2, pt1);
+
 		}
 
         public void DrawLineB1LeftB2(Box b1, Box b2, Graphics g, Pen p)
 		{
+			int distanceX = b1.PositionX - b2.PositionX + b2.Width;
 			Point p1 = new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2);
 			Point p2 = new Point(b2.PositionX, b2.PositionY + b2.Height / 2);
 
-			g.DrawLine(p, p1, p2);
+			Point pt1 = new Point(b2.PositionX + (distanceX / 2), b2.PositionY + (b2.Height / 2));
+			Point pt2 = new Point(b1.PositionX - (distanceX / 2) + b1.Width, b1.PositionY + (b1.Height / 2));
+
+			g.DrawLine(p, p1, pt2);
+			g.DrawLine(p, pt2, pt1);
+			g.DrawLine(p, p2, pt1);
 		}
 
         public void DrawLineB1OverB2(Box b1, Box b2, Graphics g, Pen p)
 		{
+			int distanceY = b2.PositionY - b1.PositionY - b2.Height;
+
 			Point p1 = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height);
 			Point p2 = new Point(b2.PositionX + b2.Width / 2, b2.PositionY);
 
-			g.DrawLine(p, p1, p2);
+			Point pt1 = new Point(b1.PositionX + b1.Width/2,b1.PositionY + b1.Height + (distanceY/2));
+			Point pt2 = new Point(b2.PositionX + b2.Width / 2, b2.PositionY - distanceY / 2);
+
+			g.DrawLine(p, p1, pt1);
+			g.DrawLine(p, pt2, pt1);
+			g.DrawLine(p, pt2, p2);
 		}
 
         public void DrawLineB1UnderB2(Box b1, Box b2, Graphics g, Pen p)
 		{
-			Point p1 = new Point(b1.PositionX + b1.Width / 2, b1.PositionY );
-			Point p2 = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b1.Height);
+			int distanceY = b1.PositionY -b1.Height - b2.PositionY;
 
-			g.DrawLine(p, p1, p2);
+			Point p1 = new Point(b1.PositionX + b1.Width / 2, b1.PositionY );
+			Point p2 = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height);
+
+			Point pt1 = new Point(b1.PositionX + b1.Width / 2, b1.PositionY - distanceY / 2);
+			Point pt2 = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height + (distanceY / 2));
+			
+
+			g.DrawLine(p, p1, pt1);
+			g.DrawLine(p, pt2, pt1);
+			g.DrawLine(p, pt2, p2);
 		}
-        public void DrawAssociation(Box b1, Box b2, Graphics g, Pen p, string rel, string relOrigin)
+		public void DrawLineThroughPoint(Box b1, Box b2, List<Point> points, Graphics g, Pen p)
+		{
+
+		}
+		public void DrawAssociation(Box b1, Box b2, Graphics g, Pen p, string rel, string relOrigin)
         {
 			if(relOrigin == "source")
 			{
@@ -315,6 +347,7 @@ namespace DragAndDrop.Boxes
 						new Point(b1.PositionX + b1.Width + 15, b1.PositionY + b1.Height / 2 -8)
 					};
 
+					/*
 					Point rotatePoint = new Point(b2.PositionX, b2.PositionY + b2.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -324,6 +357,9 @@ namespace DragAndDrop.Boxes
 
 					g.DrawLine(p, rotPt1, points[0]);
 					g.DrawLine(p, rotPt2, points[0]);
+					*/
+					g.DrawLine(p, points[0], points[1]);
+					g.DrawLine(p, points[0], points[2]);
 				}
 				else if (b1.PositionX > b2.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
 				{
@@ -333,6 +369,7 @@ namespace DragAndDrop.Boxes
 						new Point(b1.PositionX - 15, b1.PositionY + b1.Height / 2 + 8),
 						new Point(b1.PositionX - 15, b1.PositionY + b1.Height / 2 -8)
 					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX + b2.Width, b2.PositionY + b2.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -343,6 +380,9 @@ namespace DragAndDrop.Boxes
 
 					g.DrawLine(p, rotPt1, points[0]);
 					g.DrawLine(p, rotPt2, points[0]);
+					*/
+					g.DrawLine(p, points[0], points[1]);
+					g.DrawLine(p, points[0], points[2]);
 				}
 				else if (b1.PositionY < b2.PositionY)
 				{
@@ -352,6 +392,7 @@ namespace DragAndDrop.Boxes
 						new Point(b1.PositionX + b1.Width / 2 + 8, b1.PositionY + b1.Height + 15),
 						new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY + b1.Height +15)
 					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX + b2.Width / 2, b2.PositionY);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -362,6 +403,9 @@ namespace DragAndDrop.Boxes
 
 					g.DrawLine(p, rotPt1, points[0]);
 					g.DrawLine(p, rotPt2, points[0]);
+					*/
+					g.DrawLine(p, points[0], points[1]);
+					g.DrawLine(p, points[0], points[2]);
 				}
 				else if (b1.PositionY > b2.PositionY)
 				{
@@ -371,6 +415,7 @@ namespace DragAndDrop.Boxes
 						new Point(b1.PositionX + b1.Width / 2 + 8, b1.PositionY - 15), //top
                         new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY -15) //bottom
 					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -381,6 +426,9 @@ namespace DragAndDrop.Boxes
 
 					g.DrawLine(p, rotPt1, points[0]);
 					g.DrawLine(p, rotPt2, points[0]);
+					*/
+					g.DrawLine(p, points[0], points[1]);
+					g.DrawLine(p, points[0], points[2]);
 				}
 			}
 			else if(relOrigin == "target")
@@ -393,6 +441,7 @@ namespace DragAndDrop.Boxes
 						new Point(b2.PositionX + b2.Width + 15, b2.PositionY + b2.Height / 2 + 8), //top
                         new Point(b2.PositionX + b2.Width + 15, b2.PositionY + b2.Height / 2 -8) //bottom
 					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX, b1.PositionY + b1.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -402,6 +451,9 @@ namespace DragAndDrop.Boxes
 
 					g.DrawLine(p, rotPt1, points[0]);
 					g.DrawLine(p, rotPt2, points[0]);
+					*/
+					g.DrawLine(p, points[0], points[1]);
+					g.DrawLine(p, points[0], points[2]);
 				}
 				else if (b2.PositionX > b1.PositionX && b1.PositionX + b1.Width <= b2.PositionX)
 				{
@@ -411,6 +463,7 @@ namespace DragAndDrop.Boxes
 						new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 + 8),
 						new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 -8)
 					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -421,6 +474,7 @@ namespace DragAndDrop.Boxes
 
 					g.DrawLine(p, rotPt1, points[0]);
 					g.DrawLine(p, rotPt2, points[0]);
+					*/
 				}
 				else if (b2.PositionY < b1.PositionY)
 				{
@@ -430,6 +484,7 @@ namespace DragAndDrop.Boxes
 						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY + b2.Height + 15),
 						new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY + b2.Height +15)
 					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -440,6 +495,9 @@ namespace DragAndDrop.Boxes
 
 					g.DrawLine(p, rotPt1, points[0]);
 					g.DrawLine(p, rotPt2, points[0]);
+					*/
+					g.DrawLine(p, points[0], points[1]);
+					g.DrawLine(p, points[0], points[2]);
 				}
 				else if (b2.PositionY > b1.PositionY)
 				{
@@ -449,6 +507,7 @@ namespace DragAndDrop.Boxes
 						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY - 15),
 						new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY -15)
 					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -459,6 +518,9 @@ namespace DragAndDrop.Boxes
 
 					g.DrawLine(p, rotPt1, points[0]);
 					g.DrawLine(p, rotPt2, points[0]);
+					*/
+					g.DrawLine(p, points[0], points[1]);
+					g.DrawLine(p, points[0], points[2]);
 				}
 			}
         }
@@ -476,6 +538,14 @@ namespace DragAndDrop.Boxes
                         new Point(b1.PositionX + b1.Width  + 30, b1.PositionY + b1.Height / 2),
                         new Point(b1.PositionX + b1.Width + 15, b1.PositionY + b1.Height / 2 -8) 
 					};
+					Point[] points2 =
+					{
+						new Point(b1.PositionX + b1.Width +2, b1.PositionY + b1.Height / 2),
+						new Point(b1.PositionX + b1.Width + 14, b1.PositionY + b1.Height / 2 + 7),
+						new Point(b1.PositionX + b1.Width  + 29, b1.PositionY + b1.Height / 2),
+						new Point(b1.PositionX + b1.Width + 14, b1.PositionY + b1.Height / 2 -7)
+					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX, b2.PositionY + b2.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -491,8 +561,11 @@ namespace DragAndDrop.Boxes
 						rotPt2,
 						rotPt3
 					};
-
+					
 					g.DrawPolygon(p, rotatedPts);
+					*/
+					g.DrawPolygon(p, points);
+					g.FillPolygon(Brushes.White, points2);
 				}
 
 				//b2--<>b1
@@ -505,6 +578,14 @@ namespace DragAndDrop.Boxes
                         new Point(b1.PositionX - 30, b1.PositionY + b1.Height / 2), 
                         new Point(b1.PositionX - 15, b1.PositionY + b1.Height / 2 -8) 
 					};
+					Point[] points2 =
+					{
+						new Point(b1.PositionX-2, b1.PositionY + b1.Height / 2),
+						new Point(b1.PositionX - 14, b1.PositionY + b1.Height / 2 + 7),
+						new Point(b1.PositionX - 29, b1.PositionY + b1.Height / 2),
+						new Point(b1.PositionX - 14, b1.PositionY + b1.Height / 2 -7)
+					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX + b2.Width, b2.PositionY + b2.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -523,6 +604,9 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.DrawPolygon(p, rotatedPts);
+					*/
+					g.DrawPolygon(p, points);
+					g.FillPolygon(Brushes.White, points2);
 				}
 
 				//b1^b2
@@ -535,6 +619,14 @@ namespace DragAndDrop.Boxes
                         new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height + 30), 
                         new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY + b1.Height +15) 
 					};
+					Point[] points2 =
+					{
+						new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height+2),
+						new Point(b1.PositionX + b1.Width / 2 + 7, b1.PositionY + b1.Height + 14),
+						new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height + 29),
+						new Point(b1.PositionX + b1.Width / 2 - 7, b1.PositionY + b1.Height +14)
+					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX + b2.Width / 2, b2.PositionY);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -553,6 +645,9 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.DrawPolygon(p, rotatedPts);
+					*/
+					g.DrawPolygon(p, points);
+					g.FillPolygon(Brushes.White, points2);
 				}
 				//b1ˇb2
 				else if (b1.PositionY > b2.PositionY)
@@ -564,6 +659,14 @@ namespace DragAndDrop.Boxes
                         new Point(b1.PositionX + b1.Width / 2, b1.PositionY - 30), 
                         new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY -15) 
 					};
+					Point[] points2 =
+					{
+						new Point(b1.PositionX + b1.Width / 2, b1.PositionY-2),
+						new Point(b1.PositionX + b1.Width / 2 + 7, b1.PositionY - 14),
+						new Point(b1.PositionX + b1.Width / 2, b1.PositionY - 29),
+						new Point(b1.PositionX + b1.Width / 2 - 7, b1.PositionY -14)
+					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -582,6 +685,9 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.DrawPolygon(p, rotatedPts);
+					*/
+					g.DrawPolygon(p, points);
+					g.FillPolygon(Brushes.White, points2);
 				}
 
 			}
@@ -597,6 +703,14 @@ namespace DragAndDrop.Boxes
                         new Point(b2.PositionX + b2.Width  + 30, b2.PositionY + b2.Height / 2),
                         new Point(b2.PositionX + b2.Width + 15, b2.PositionY + b2.Height / 2 -8) 
 					};
+					Point[] points2 =
+					{
+						new Point(b2.PositionX + b2.Width+2, b2.PositionY + b2.Height / 2),
+						new Point(b2.PositionX + b2.Width + 14, b2.PositionY + b2.Height / 2 + 7),
+						new Point(b2.PositionX + b2.Width  + 29, b2.PositionY + b2.Height / 2),
+						new Point(b2.PositionX + b2.Width + 14, b2.PositionY + b2.Height / 2 -7)
+					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX, b1.PositionY + b1.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -614,6 +728,9 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.DrawPolygon(p, rotatedPts);
+					*/
+					g.DrawPolygon(p, points);
+					g.FillPolygon(Brushes.White, points2);
 				}
 
 				//b1--<>b2
@@ -626,6 +743,14 @@ namespace DragAndDrop.Boxes
                         new Point(b2.PositionX - 30, b2.PositionY + b2.Height / 2), 
                         new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 -8) 
 					};
+					Point[] points2 =
+					{
+						new Point(b2.PositionX-2, b2.PositionY + b2.Height / 2),
+						new Point(b2.PositionX - 14, b2.PositionY + b2.Height / 2 + 7),
+						new Point(b2.PositionX - 29, b2.PositionY + b2.Height / 2),
+						new Point(b2.PositionX - 14, b2.PositionY + b2.Height / 2 -7)
+					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -644,6 +769,9 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.DrawPolygon(p, rotatedPts);
+					*/
+					g.DrawPolygon(p, points);
+					g.FillPolygon(Brushes.White, points2);
 				}
 
 				//b2^b1
@@ -656,6 +784,14 @@ namespace DragAndDrop.Boxes
                         new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height + 30), 
                         new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY + b2.Height +15)
 					};
+					Point[] points2 =
+					{
+						new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height+2),
+						new Point(b2.PositionX + b2.Width / 2 + 7, b2.PositionY + b2.Height + 14),
+						new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height + 29),
+						new Point(b2.PositionX + b2.Width / 2 - 7, b2.PositionY + b2.Height +14)
+					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -674,6 +810,9 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.DrawPolygon(p, rotatedPts);
+					*/
+					g.DrawPolygon(p, points);
+					g.FillPolygon(Brushes.White, points2);
 				}
 				//b2ˇb1
 				else if (b2.PositionY > b1.PositionY)
@@ -685,6 +824,14 @@ namespace DragAndDrop.Boxes
                         new Point(b2.PositionX + b2.Width / 2, b2.PositionY - 30), 
                         new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY -15) 
 					};
+					Point[] points2 =
+					{
+						new Point(b2.PositionX + b2.Width / 2, b2.PositionY-2),
+						new Point(b2.PositionX + b2.Width / 2 + 7, b2.PositionY - 14),
+						new Point(b2.PositionX + b2.Width / 2, b2.PositionY - 29),
+						new Point(b2.PositionX + b2.Width / 2 - 7, b2.PositionY -14)
+					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -703,6 +850,9 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.DrawPolygon(p, rotatedPts);
+					*/
+					g.DrawPolygon(p, points);
+					g.FillPolygon(Brushes.White, points2);
 				}
 			}
 		}
@@ -722,6 +872,7 @@ namespace DragAndDrop.Boxes
                         new Point(b1.PositionX + b1.Width  + 30, b1.PositionY + b1.Height / 2),
                         new Point(b1.PositionX + b1.Width + 15, b1.PositionY + b1.Height / 2 -8) 
 					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX, b2.PositionY + b2.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -739,6 +890,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 
 				//b2--<>b1
@@ -751,6 +904,7 @@ namespace DragAndDrop.Boxes
                         new Point(b1.PositionX - 30, b1.PositionY + b1.Height / 2),
                         new Point(b1.PositionX - 15, b1.PositionY + b1.Height / 2 -8) 
 					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX + b2.Width, b2.PositionY + b2.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -769,6 +923,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 
 				//b1^b2
@@ -781,6 +937,7 @@ namespace DragAndDrop.Boxes
                         new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height + 30), 
                         new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY + b1.Height +15)
 					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX + b2.Width / 2, b2.PositionY);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -799,6 +956,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 				//b1ˇb2
 				else if (b1.PositionY > b2.PositionY)
@@ -810,6 +969,7 @@ namespace DragAndDrop.Boxes
                         new Point(b1.PositionX + b1.Width / 2, b1.PositionY - 30), 
                         new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY -15) 
 					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -828,6 +988,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 
 			}
@@ -843,6 +1005,7 @@ namespace DragAndDrop.Boxes
                         new Point(b2.PositionX + b2.Width  + 30, b2.PositionY + b2.Height / 2),
                         new Point(b2.PositionX + b2.Width + 15, b2.PositionY + b2.Height / 2 -8) 
 					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX, b1.PositionY + b1.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -860,6 +1023,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 
 				//b1--<>b2
@@ -872,6 +1037,7 @@ namespace DragAndDrop.Boxes
                         new Point(b2.PositionX - 30, b2.PositionY + b2.Height / 2), 
                         new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 -8) 
 					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -890,6 +1056,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 
 				//b2^b1
@@ -902,6 +1070,7 @@ namespace DragAndDrop.Boxes
                         new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height + 30),
                         new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY + b2.Height +15) 
 					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -919,7 +1088,8 @@ namespace DragAndDrop.Boxes
 						rotPt3
 					};
 
-					g.FillPolygon(b, rotatedPts);
+					g.FillPolygon(b, rotatedPts);*/
+					g.FillPolygon(b, points);
 				}
 				//b2ˇb1
 				else if (b2.PositionY > b1.PositionY)
@@ -931,6 +1101,7 @@ namespace DragAndDrop.Boxes
                         new Point(b2.PositionX + b2.Width / 2, b2.PositionY - 30), 
                         new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY -15) 
 					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -949,6 +1120,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 			}
 		}
@@ -968,7 +1141,7 @@ namespace DragAndDrop.Boxes
 						new Point(b1.PositionX + b1.Width + 15, b1.PositionY + b1.Height / 2 + 8),
                         new Point(b1.PositionX + b1.Width + 15, b1.PositionY + b1.Height / 2 -8)
 					};
-
+					/*
 					Point rotatePoint = new Point(b2.PositionX, b2.PositionY + b2.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -984,6 +1157,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 
 				//b2--|>b1
@@ -995,6 +1170,7 @@ namespace DragAndDrop.Boxes
 						new Point(b1.PositionX - 15, b1.PositionY + b1.Height / 2 + 8), 
                         new Point(b1.PositionX - 15, b1.PositionY + b1.Height / 2 -8)
 					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX + b2.Width, b2.PositionY + b2.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -1011,6 +1187,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 
 				//b1^b2
@@ -1022,6 +1200,7 @@ namespace DragAndDrop.Boxes
 						new Point(b1.PositionX + b1.Width / 2 + 8, b1.PositionY + b1.Height + 15),
                         new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY + b1.Height +15) 
 					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX + b2.Width/2, b2.PositionY);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -1038,6 +1217,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 				//b1ˇb2
 				else if (b1.PositionY > b2.PositionY)
@@ -1048,6 +1229,7 @@ namespace DragAndDrop.Boxes
 						new Point(b1.PositionX + b1.Width / 2 + 8, b1.PositionY - 15), 
                         new Point(b1.PositionX + b1.Width / 2 - 8, b1.PositionY -15)
 					};
+					/*
 					Point rotatePoint = new Point(b2.PositionX + b2.Width / 2, b2.PositionY + b2.Height);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -1064,6 +1246,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 
 			}
@@ -1078,6 +1262,7 @@ namespace DragAndDrop.Boxes
 						new Point(b2.PositionX + b2.Width + 15, b2.PositionY + b2.Height / 2 + 8), 
                         new Point(b2.PositionX + b2.Width + 15, b2.PositionY + b2.Height / 2 -8)
 					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX, b1.PositionY + b1.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -1093,6 +1278,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 
 				//b1--<>b2
@@ -1104,6 +1291,7 @@ namespace DragAndDrop.Boxes
 						new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 + 8), 
                         new Point(b2.PositionX - 15, b2.PositionY + b2.Height / 2 -8) 
 					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX + b1.Width, b1.PositionY + b1.Height / 2);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -1119,6 +1307,8 @@ namespace DragAndDrop.Boxes
 						rotPt2
 					};
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 
 				//b2^b1
@@ -1130,6 +1320,7 @@ namespace DragAndDrop.Boxes
 						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY + b2.Height + 15), 
                         new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY + b2.Height +15)
 					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -1146,6 +1337,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 				//b2ˇb1
 				else if (b2.PositionY > b1.PositionY)
@@ -1156,6 +1349,7 @@ namespace DragAndDrop.Boxes
 						new Point(b2.PositionX + b2.Width / 2 + 8, b2.PositionY - 15),
                         new Point(b2.PositionX + b2.Width / 2 - 8, b2.PositionY -15)
 					};
+					/*
 					Point rotatePoint = new Point(b1.PositionX + b1.Width / 2, b1.PositionY + b1.Height);
 
 					double angle = Math.Atan2(rotatePoint.Y - points[0].Y, rotatePoint.X - points[0].X);
@@ -1172,6 +1366,8 @@ namespace DragAndDrop.Boxes
 					};
 
 					g.FillPolygon(b, rotatedPts);
+					*/
+					g.FillPolygon(b, points);
 				}
 			}
 		}
@@ -1188,12 +1384,12 @@ namespace DragAndDrop.Boxes
 			{
 				if (b1.PositionX < b2.PositionX && b1.PositionX + b1.Width <= b2.PositionX)
 				{
-					Point pt = new Point(b1.PositionX + b1.Width + 30, b1.PositionY + b1.Height / 2 - 30);
+					Point pt = new Point(b1.PositionX + b1.Width + 50, b1.PositionY + b1.Height / 2 - 50);
 					g.DrawString(cardinality, new Font("Segoe UI", 16), Brushes.Black, pt);
 				}
 				else if (b1.PositionX > b2.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
 				{
-					Point pt = new Point(b1.PositionX - 30, b1.PositionY + b1.Height / 2 - 30);
+					Point pt = new Point(b1.PositionX - 50, b1.PositionY + b1.Height / 2 - 50);
 					g.DrawString(cardinality, new Font("Segoe UI", 16), Brushes.Black, pt);
 				}
 				else if (b1.PositionY < b2.PositionY)
@@ -1211,12 +1407,12 @@ namespace DragAndDrop.Boxes
 			{
 				if(b2.PositionX < b1.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
 				{
-					Point pt = new Point(b2.PositionX + b2.Width + 30, b2.PositionY + b2.Height / 2 - 30);
+					Point pt = new Point(b2.PositionX + b2.Width + 50, b2.PositionY + b2.Height / 2 - 50);
 					g.DrawString(cardinality, new Font("Segoe UI", 16), Brushes.Black, pt);
 				}
 				else if(b2.PositionX > b1.PositionX && b1.PositionX + b1.Width <= b2.PositionX)
 				{
-					Point pt = new Point(b2.PositionX- 30, b2.PositionY + b2.Height / 2 -30);
+					Point pt = new Point(b2.PositionX- 50, b2.PositionY + b2.Height / 2 - 50);
 					g.DrawString(cardinality, new Font("Segoe UI", 16), Brushes.Black, pt);
 				}
 				else if(b2.PositionY < b1.PositionY)
@@ -1231,5 +1427,6 @@ namespace DragAndDrop.Boxes
 				}
 			}
 		}
+
 	}
 }

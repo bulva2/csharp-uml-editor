@@ -122,44 +122,10 @@ namespace DragAndDrop
         }
         public void AddConnection(Box b1, Box b2, string rel, string relOrigin, string srcCardinality, string tgtCardinality)
         {
-            //_connections.Add((b1, b2));
             Tuple<Box, Box, string, string, string, string> connection = Tuple.Create(b1, b2, rel, relOrigin, srcCardinality, tgtCardinality);
             _con.Add(connection);
         }
-        /*
-        public void AddRels(string rel, string relOrigin)
-        {
-            _rels.Add((rel, relOrigin));
-        }
-        public void AddRelationship(Box box)
-        {
-            if(_rels.)
-        }
-        */
-        /*
-        public void CheckLines(Box b1, Box b2, Graphics g, Pen p)
-        {
-			foreach (Box box in _boxes)
-            {
-                if (b1.PositionX < b2.PositionX && b1.PositionX + b1.Width <=  b2.PositionX)
-                {
-                    box.DrawLineB1LeftB2(b1, b2, g, p);
-                }
-                else if (b1.PositionX > b2.PositionX && b2.PositionX + b2.Width <= b1.PositionX)
-                {
-                    box.DrawLineB1RightB2(b1, b2, g, p);
-                }
-                else if (b1.PositionY < b2.PositionY)
-                {
-                    box.DrawLineB1OverB2(b1, b2, g, p);
-                }
-                else if (b1.PositionY > b2.PositionY)
-                {
-                    box.DrawLineB1UnderB2(b1, b2, g, p);
-                }
-			}
-		}
-        */
+
 
         public void CheckLinesRels(Box b1, Box b2, string rel, string relOrigin, Graphics g, Pen p, string srcCardinality, string tgtCardinality)
         {
