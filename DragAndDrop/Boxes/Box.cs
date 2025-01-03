@@ -4,6 +4,8 @@ using System.Xml.Serialization;
 namespace DragAndDrop.Boxes
 {
     [XmlInclude(typeof(ClassBox))]
+	[XmlInclude(typeof(InterfaceBox))]
+	[XmlInclude(typeof(AbstractClassBox))]
     public abstract class Box
     {
 		[JsonPropertyName("PositionX")]
@@ -26,6 +28,8 @@ namespace DragAndDrop.Boxes
         protected int MaxWidth => 360;
         protected int MaxHeight => 360;
 
+        protected int _separator = 0;
+
         protected StringFormat _formatCenter;
 
         protected Brush ColorBrush;
@@ -41,9 +45,6 @@ namespace DragAndDrop.Boxes
         public List<string> MethodsText => _methods.Select(l => l.Text).ToList();
         [JsonPropertyName("colorName")]
         public string colorName => GetColor();
-
-		[JsonPropertyName("_separator")]
-        public int Separator = 0;
 
         public Box(int x, int y, string name)
         {
@@ -68,7 +69,7 @@ namespace DragAndDrop.Boxes
         }
 
         [JsonConstructor]
-        public Box(int positionX, int positionY, int width, int height, string originalName, string boxType, List<string> labelsText, List<string> methodsText, string colorName, int separator)
+        public Box(int positionX, int positionY, int width, int height, string originalName, string boxType, List<string> labelsText, List<string> methodsText, string colorName)
         {
             PositionX = positionX;
             PositionY = positionY;
@@ -78,7 +79,6 @@ namespace DragAndDrop.Boxes
 			BoxType = boxType;
             Name = originalName;
             ColorBrush = new SolidBrush(Color.FromName(colorName));
-            Separator = separator;
 
             _labels = new List<Label>();
             _methods = new List<Label>();
@@ -125,7 +125,7 @@ namespace DragAndDrop.Boxes
             if (h > MaxHeight)
                 h = MaxHeight;
 
-            Separator = h - Height + ((Height * 2) / 9) + (_labels.Count * 20) + 10;
+            _separator = h - Height + ((Height * 2) / 9) + (_labels.Count * 20) + 10;
             
             Width = w;
             Height = h;
@@ -216,7 +216,7 @@ namespace DragAndDrop.Boxes
             {
                 Text = method,
                 AutoSize = true,
-                Location = new Point(10, Separator + 10 + (_methods.Count * 20))
+                Location = new Point(10, _separator + 10 + (_methods.Count * 20))
             };
             _methods.Add(methodLabel);
 
@@ -226,7 +226,7 @@ namespace DragAndDrop.Boxes
         {
 			using (Pen pen = new Pen(Color.Black, 1))
 			{
-				g.DrawLine(pen, 0, Separator, Width, Separator);
+				g.DrawLine(pen, 0, _separator, Width, _separator);
 			}
 
 			foreach (Label label in _methods)
@@ -239,7 +239,7 @@ namespace DragAndDrop.Boxes
 			{
 				for (int i = 0; i < _methods.Count; i++)
 				{
-					_methods[i].Location = new Point(10, (Separator) + 10 + (_methods.Count + i * 20));
+					_methods[i].Location = new Point(10, (_separator) + 10 + (_methods.Count + i * 20));
 				}
 			}
 			else
@@ -258,11 +258,11 @@ namespace DragAndDrop.Boxes
             if (_labels.Count > 0)
             {
                 Label lastProperty = _labels.Last();
-                Separator = lastProperty.Location.Y + lastProperty.Height + 10;
+                _separator = lastProperty.Location.Y + lastProperty.Height + 10;
             }
             else
             {
-                Separator = (Height * 2) / 9;
+                _separator = (Height * 2) / 9;
             }
 
             UpdateMethodPositions();

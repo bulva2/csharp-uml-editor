@@ -23,7 +23,7 @@ namespace DragAndDrop.Boxes
 		}
 
 		[JsonConstructor]
-        public AbstractClassBox(int positionX, int positionY, int width, int height, string originalName, string boxType, List<string> labelsText, List<string> methodsText, string colorName, int separator) : base(positionX, positionY, width, height, originalName, boxType, labelsText, methodsText, colorName, separator)
+        public AbstractClassBox(int positionX, int positionY, int width, int height, string originalName, string boxType, List<string> labelsText, List<string> methodsText, string colorName) : base(positionX, positionY, width, height, originalName, boxType, labelsText, methodsText, colorName)
         {
         }
 
