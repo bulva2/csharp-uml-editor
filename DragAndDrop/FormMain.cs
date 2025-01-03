@@ -298,9 +298,16 @@ namespace DragAndDrop
             string relationship = "";
             string relationshipPlace = "";
 
+            string srcCardinality = "";
+            string tgtCardinality = "";
+
             if (formAddLine.ShowDialog() == DialogResult.OK && formAddLine._targetBox != null)
             {
-                if (formAddLine._isNoneRelation == false)
+				srcCardinality = formAddLine.srcClassCardinality;
+
+				tgtCardinality = formAddLine.tgtClassCardinality;
+
+				if (formAddLine._isNoneRelation == false)
                 {
                     if (string.IsNullOrEmpty(formAddLine._relationship))
                         return;
@@ -309,11 +316,10 @@ namespace DragAndDrop
                     if (string.IsNullOrEmpty(formAddLine._relationshipPlace))
                         return;
                     relationshipPlace = formAddLine._relationshipPlace;
-
-                    _canvas.AddConnection(_selectedBox, formAddLine._targetBox, relationship, relationshipPlace);
+                    _canvas.AddConnection(_selectedBox, formAddLine._targetBox, relationship, relationshipPlace, srcCardinality, tgtCardinality);
                 }
                 else
-                    _canvas.AddConnection(_selectedBox, formAddLine._targetBox, relationship, relationshipPlace);
+                    _canvas.AddConnection(_selectedBox, formAddLine._targetBox, relationship, relationshipPlace, srcCardinality, tgtCardinality);
             }
         }
 

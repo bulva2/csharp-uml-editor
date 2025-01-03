@@ -7,7 +7,7 @@ namespace DragAndDrop
         private List<Box> _boxes;
         private Selection? _selection;
         private ListManipulator<Box> _manipulator;
-        private List<Tuple<Box, Box, string, string>> _con = new List<Tuple<Box, Box, string, string>>();
+        private List<Tuple<Box, Box, string, string, string, string>> _con = new List<Tuple<Box, Box, string, string, string, string>>();
 
         public Canvas()
         {
@@ -28,9 +28,9 @@ namespace DragAndDrop
             {
                 box.Draw(g);
 				using(Pen p = new Pen(Color.Black, 2))
-                foreach(var(b1, b2, rel, relOrigin) in _con)
+                foreach(var(b1, b2, rel, relOrigin, srcCardinality, tgtCardinality) in _con)
                 {
-                    CheckLinesRels(b1, b2, rel, relOrigin, g, p);
+                    CheckLinesRels(b1, b2, rel, relOrigin, g, p, srcCardinality, tgtCardinality);
                 }
 			}
         }
@@ -120,10 +120,10 @@ namespace DragAndDrop
         {
             return _boxes.Exists(box => box.OriginalName == name);
         }
-        public void AddConnection(Box b1, Box b2, string rel, string relOrigin)
+        public void AddConnection(Box b1, Box b2, string rel, string relOrigin, string srcCardinality, string tgtCardinality)
         {
             //_connections.Add((b1, b2));
-            Tuple<Box, Box, string, string> connection = Tuple.Create(b1, b2, rel, relOrigin);
+            Tuple<Box, Box, string, string, string, string> connection = Tuple.Create(b1, b2, rel, relOrigin, srcCardinality, tgtCardinality);
             _con.Add(connection);
         }
         /*
@@ -136,6 +136,7 @@ namespace DragAndDrop
             if(_rels.)
         }
         */
+        /*
         public void CheckLines(Box b1, Box b2, Graphics g, Pen p)
         {
 			foreach (Box box in _boxes)
@@ -158,8 +159,9 @@ namespace DragAndDrop
                 }
 			}
 		}
+        */
 
-        public void CheckLinesRels(Box b1, Box b2, string rel, string relOrigin, Graphics g, Pen p)
+        public void CheckLinesRels(Box b1, Box b2, string rel, string relOrigin, Graphics g, Pen p, string srcCardinality, string tgtCardinality)
         {
             foreach (Box box in _boxes)
             {
@@ -196,6 +198,8 @@ namespace DragAndDrop
                 {
                     box.DrawGeneralisation(b1, b2, g, p, rel, relOrigin);
                 }
+                box.DrawMultiplicity(b1, b2, g, srcCardinality, "source");
+                box.DrawMultiplicity(b1, b2, g, tgtCardinality, "target");
             }
         }
     }

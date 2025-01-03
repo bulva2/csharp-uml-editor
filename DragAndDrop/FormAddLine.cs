@@ -9,6 +9,9 @@ namespace DragAndDrop
 		public string? _relationship;
 		public string? _relationshipPlace;
 		public bool _isNoneRelation;
+
+		public string? srcClassCardinality;
+		public string? tgtClassCardinality;
 		public FormAddLine(Box baseBox, List<Box> boxes)
 		{
 			InitializeComponent();
@@ -33,6 +36,21 @@ namespace DragAndDrop
 			{
 				if (line_TargetBoxCB.SelectedItem == null)
 					return;
+
+				if (line_srcClassMultiplicityCB.SelectedItem == null)
+					return;
+
+				if (line_tgtClassMultiplicityCB.SelectedItem == null)
+					return;
+
+				srcClassCardinality = (string)line_srcClassMultiplicityCB.SelectedItem;
+				tgtClassCardinality = (string)line_tgtClassMultiplicityCB.SelectedItem;
+
+				if (srcClassCardinality == "none")
+					srcClassCardinality = "";
+
+				if (tgtClassCardinality == "none")
+					tgtClassCardinality= "none";
 
 				if (line_sourceClassRelationRB.Checked)
 				{
