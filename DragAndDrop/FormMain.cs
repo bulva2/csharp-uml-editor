@@ -2,6 +2,7 @@
 using DragAndDrop.Enums;
 using System.Drawing.Imaging;
 using System.Text.Json;
+using System.Xml.Serialization;
 
 namespace DragAndDrop
 {
@@ -296,24 +297,24 @@ namespace DragAndDrop
 
             string relationship = "";
             string relationshipPlace = "";
-            
+
             if (formAddLine.ShowDialog() == DialogResult.OK && formAddLine._targetBox != null)
             {
-                if(formAddLine._isNoneRelation == false)
+                if (formAddLine._isNoneRelation == false)
                 {
                     if (string.IsNullOrEmpty(formAddLine._relationship))
                         return;
                     relationship = formAddLine._relationship;
 
-					if (string.IsNullOrEmpty(formAddLine._relationshipPlace))
-						return;
-					relationshipPlace = formAddLine._relationshipPlace;
+                    if (string.IsNullOrEmpty(formAddLine._relationshipPlace))
+                        return;
+                    relationshipPlace = formAddLine._relationshipPlace;
 
-					_canvas.AddConnection(_selectedBox, formAddLine._targetBox, relationship, relationshipPlace);
-				}
+                    _canvas.AddConnection(_selectedBox, formAddLine._targetBox, relationship, relationshipPlace);
+                }
                 else
-					_canvas.AddConnection(_selectedBox, formAddLine._targetBox, relationship, relationshipPlace);
-			}
+                    _canvas.AddConnection(_selectedBox, formAddLine._targetBox, relationship, relationshipPlace);
+            }
         }
 
         private void jSONFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -328,6 +329,7 @@ namespace DragAndDrop
             {
                 string path = saveFileDialogJson.FileName;
                 string json = JsonSerializer.Serialize(_canvas.GetBoxes(), options);
+
                 File.WriteAllText(path, json);
                 MessageBox.Show($"JSON file saved successfully!\nLocation: {path}");
             }
@@ -392,6 +394,18 @@ namespace DragAndDrop
             catch (Exception e)
             {
                 MessageBox.Show($"Error while deserializing JSON file!\n\nError message: {e.Message}", "JSON Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void xMLFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Box>));
+            DialogResult result = saveFileDialogXml.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                string path = saveFileDialogXml.FileName;
+                serializer.Serialize(File.Create(path), _canvas.GetBoxes());
             }
         }
     }

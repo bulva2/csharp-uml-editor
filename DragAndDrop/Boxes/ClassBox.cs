@@ -27,5 +27,22 @@ namespace DragAndDrop.Boxes
         public ClassBox(int positionX, int positionY, int width, int height, string originalName, string boxType, List<string> labelsText, List<string> methodsText, string colorName, int separator) : base(positionX, positionY, width, height, originalName, boxType, labelsText, methodsText, colorName, separator)
         {
         }
+
+        public ClassBox() : base(0, 0, string.Empty)
+        {
+            PositionX = 0;
+            PositionY = 0;
+
+            Width = 180;
+            Height = 180;
+            ColorBrush = Brushes.LightSkyBlue;
+            Name = string.Empty;
+
+            _formatCenter = new StringFormat()
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+        }
     }
 }

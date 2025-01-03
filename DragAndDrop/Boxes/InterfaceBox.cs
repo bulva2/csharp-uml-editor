@@ -27,6 +27,23 @@ namespace DragAndDrop.Boxes
 
         }
 
+        public InterfaceBox() : base(0, 0, string.Empty)
+        {
+            PositionX = 0;
+            PositionY = 0;
+
+            Width = 180;
+            Height = 180;
+            ColorBrush = Brushes.LightSkyBlue;
+            Name = string.Empty;
+
+            _formatCenter = new StringFormat()
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+        }
+
         public override void Unselect()
         {
             ColorBrush = Brushes.LightCoral;

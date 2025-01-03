@@ -26,9 +26,24 @@ namespace DragAndDrop.Boxes
         {
         }
 
+        public AbstractClassBox() : base(0, 0, string.Empty)
+        {
+            PositionX = 0;
+            PositionY = 0;
 
+            Width = 180;
+            Height = 180;
+            ColorBrush = Brushes.LightSkyBlue;
+            Name = string.Empty;
 
-		public override void Draw(Graphics g)
+            _formatCenter = new StringFormat()
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+        }
+
+        public override void Draw(Graphics g)
 		{
 			g.TranslateTransform(PositionX, PositionY);
 

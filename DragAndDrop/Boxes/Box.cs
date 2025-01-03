@@ -1,7 +1,9 @@
 using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 namespace DragAndDrop.Boxes
 {
+    [XmlInclude(typeof(ClassBox))]
     public abstract class Box
     {
 		[JsonPropertyName("PositionX")]
