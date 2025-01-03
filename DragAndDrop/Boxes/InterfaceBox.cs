@@ -27,8 +27,8 @@ namespace DragAndDrop.Boxes
         {
 
         }
-
-        public InterfaceBox() : base(0, 0, string.Empty)
+        
+        public InterfaceBox() : base(0, 0, 0, 0, string.Empty, "Interface", new List<string>(), new List<string>(), string.Empty)
         {
             PositionX = 0;
             PositionY = 0;

@@ -28,7 +28,7 @@ namespace DragAndDrop.Boxes
         {
         }
 
-        public ClassBox() : base(0, 0, string.Empty)
+        public ClassBox() : base(0, 0, 0, 0, string.Empty, "Class", new List<string>(), new List<string>(), string.Empty)
         {
             PositionX = 0;
             PositionY = 0;

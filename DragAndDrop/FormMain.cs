@@ -4,6 +4,7 @@ using System.DirectoryServices.ActiveDirectory;
 using System.Drawing.Imaging;
 using System.Text;
 using System.Text.Json;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace DragAndDrop
@@ -516,13 +517,64 @@ namespace DragAndDrop
 
         private void fromXMLToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(List<Box>));
+            /*
             DialogResult result = openFileDialogXml.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                string path = openFileDialogXml.FileName;
+                XDocument doc = XDocument.Load(openFileDialogXml.FileName);
+                List<XElement>? boxes = doc.Descendants("Box").ToList();
+
+                foreach (XElement box in boxes)
+                {
+                    string boxType = box.Element("BoxType")?.Value!;
+                    XmlSerializer? serializer = null;
+
+                    foreach (var elem in box.DescendantsAndSelf())
+                    {
+                        elem.Name = elem.Name.LocalName;
+                        elem.Attributes().Where(a => a.IsNamespaceDeclaration).Remove();
+                    }
+
+                    if (boxType == "Class")
+                    {
+                        serializer = new XmlSerializer(typeof(ClassBox));
+                        using (StringReader reader = new StringReader(box.ToString()))
+                        {
+                            ClassBox? classBox = (ClassBox?)serializer.Deserialize(reader);
+                            if (classBox != null && !_canvas.DoesBoxNameExist(classBox.OriginalName))
+                            {
+                                _canvas.AddBoxToList(classBox);
+                            }
+                        }
+                    }
+                    else if (boxType == "Abstract")
+                    {
+                        serializer = new XmlSerializer(typeof(AbstractClassBox));
+                        using (StringReader reader = new StringReader(box.ToString()))
+                        {
+                            AbstractClassBox? abstractBox = (AbstractClassBox?)serializer.Deserialize(reader);
+                            if (abstractBox != null && !_canvas.DoesBoxNameExist(abstractBox.OriginalName))
+                            {
+                                _canvas.AddBoxToList(abstractBox);
+                            }
+                        }
+                    }
+                    else if (boxType == "Interface")
+                    {
+                        serializer = new XmlSerializer(typeof(InterfaceBox));
+                        using (StringReader reader = new StringReader(box.ToString()))
+                        {
+                            InterfaceBox? interfaceBox = (InterfaceBox?)serializer.Deserialize(reader);
+                            if (interfaceBox != null && !_canvas.DoesBoxNameExist(interfaceBox.OriginalName))
+                            {
+                                _canvas.AddBoxToList(interfaceBox);
+                            }
+                        }
+                    }
+                }
             }
+            */
         }
     }
 }
