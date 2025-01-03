@@ -4,7 +4,8 @@ namespace DragAndDrop.Boxes
 {
 	public class AbstractClassBox : Box
 	{
-        public AbstractClassBox(int x, int y, string name) : base(x, y, name)
+		public override string BoxType { get; set; } = "Abstract";
+		public AbstractClassBox(int x, int y, string name) : base(x, y, name)
 		{
 			PositionX = x;
 			PositionY = y;

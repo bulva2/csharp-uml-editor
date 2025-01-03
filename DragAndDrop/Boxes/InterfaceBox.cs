@@ -4,7 +4,8 @@ namespace DragAndDrop.Boxes
 {
 	public class InterfaceBox : Box
 	{
-        public InterfaceBox(int x, int y, string name) : base(x, y, name)
+		public override string BoxType { get; set; } = "Interface";
+		public InterfaceBox(int x, int y, string name) : base(x, y, name)
 		{
 			PositionX = x;
 			PositionY = y;
