@@ -1,5 +1,4 @@
 ﻿using DragAndDrop.Boxes;
-using System.Windows.Forms;
 
 namespace DragAndDrop
 {

@@ -1,4 +1,4 @@
-﻿namespace DragAndDrop
+﻿namespace DragAndDrop.Utils
 {
     public class ListManipulator<T>
     {

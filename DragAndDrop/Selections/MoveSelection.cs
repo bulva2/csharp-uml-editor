@@ -1,10 +1,10 @@
 ﻿using DragAndDrop.Boxes;
 
-namespace DragAndDrop
+namespace DragAndDrop.Selections
 {
     public class MoveSelection : Selection
     {
-        public MoveSelection(Box box, int x, int y) 
+        public MoveSelection(Box box, int x, int y)
             : base(box, x, y)
         { }
 

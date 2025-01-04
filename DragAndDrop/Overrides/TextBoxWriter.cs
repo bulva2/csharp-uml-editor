@@ -1,13 +1,13 @@
 ﻿using System.Text;
 
-namespace DragAndDrop
+namespace DragAndDrop.Overrides
 {
     public class TextBoxWriter : TextWriter
     {
         private readonly TextBox _textBox;
 
         public override Encoding Encoding => Encoding.UTF8;
-           
+
         public TextBoxWriter(TextBox textBox)
         {
             _textBox = textBox;

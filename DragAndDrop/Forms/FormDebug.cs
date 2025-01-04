@@ -1,4 +1,6 @@
-﻿namespace DragAndDrop
+﻿using DragAndDrop.Overrides;
+
+namespace DragAndDrop
 {
     public partial class FormDebug : Form
     {

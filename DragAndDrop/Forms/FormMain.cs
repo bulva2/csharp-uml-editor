@@ -1,10 +1,10 @@
 ﻿using DragAndDrop.Boxes;
 using DragAndDrop.Enums;
-using System.DirectoryServices.ActiveDirectory;
+using DragAndDrop.Utils;
 using System.Drawing.Imaging;
 using System.Text;
 using System.Text.Json;
-using System.Xml.Linq;
+//using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace DragAndDrop
@@ -13,11 +13,15 @@ namespace DragAndDrop
     {
         private Canvas _canvas;
         private Box? _selectedBox;
+        private Theme _theme;
+
+        public PictureBox PictureBox => pictureBox;
+        public MenuStrip MenuStrip => menuStrip;
 
         public FormMain()
         {
             _canvas = new Canvas();
-
+            _theme = new Theme(this.Handle, this);
             InitializeComponent();
         }
 
@@ -69,9 +73,7 @@ namespace DragAndDrop
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-#if DEBUG
-            Console.WriteLine("Debug Mode Active - Main Form Loaded");
-#endif
+            _theme.SetDefaultTheme();
         }
 
         private void newClassRC_Click(object sender, EventArgs e)
@@ -575,6 +577,16 @@ namespace DragAndDrop
                 }
             }
             */
+        }
+
+        private void darkThemeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _theme.SetDarkTheme();
+        }
+
+        private void lightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _theme.SetLightTheme();
         }
     }
 }

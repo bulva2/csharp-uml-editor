@@ -1,6 +1,6 @@
 ﻿using DragAndDrop.Boxes;
 
-namespace DragAndDrop
+namespace DragAndDrop.Selections
 {
     public abstract class Selection
     {
