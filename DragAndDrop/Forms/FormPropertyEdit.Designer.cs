@@ -231,7 +231,7 @@
             MinimizeBox = false;
             Name = "FormPropertyEdit";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "FormPropertyEdit";
+            Text = "Add new property";
             Load += FormPropertyEdit_Load;
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();

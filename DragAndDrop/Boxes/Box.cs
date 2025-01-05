@@ -96,7 +96,6 @@ namespace DragAndDrop.Boxes
         public virtual void Select()
         {
             ColorBrush = Brushes.LightBlue;
-            Name = "Selected";
         }
 
         public virtual void Unselect()

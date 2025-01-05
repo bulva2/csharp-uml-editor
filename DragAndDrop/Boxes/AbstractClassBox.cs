@@ -65,8 +65,7 @@ namespace DragAndDrop.Boxes
 
 		public override void Select()
 		{
-			ColorBrush = Brushes.LightBlue;
-			Name = "Selected Abstract!";
+			ColorBrush = Brushes.LightGray;
 		}
 
 		public override void Unselect()

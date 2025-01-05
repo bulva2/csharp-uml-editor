@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             pictureBox = new PictureBox();
             menuStrip = new MenuStrip();
             newToolStripMenuItem = new ToolStripMenuItem();
@@ -214,20 +215,20 @@
             // 
             themesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { lightToolStripMenuItem, darkThemeToolStripMenuItem });
             themesToolStripMenuItem.Name = "themesToolStripMenuItem";
-            themesToolStripMenuItem.Size = new Size(180, 22);
+            themesToolStripMenuItem.Size = new Size(115, 22);
             themesToolStripMenuItem.Text = "Themes";
             // 
             // lightToolStripMenuItem
             // 
             lightToolStripMenuItem.Name = "lightToolStripMenuItem";
-            lightToolStripMenuItem.Size = new Size(180, 22);
+            lightToolStripMenuItem.Size = new Size(140, 22);
             lightToolStripMenuItem.Text = "Light Theme";
             lightToolStripMenuItem.Click += lightToolStripMenuItem_Click;
             // 
             // darkThemeToolStripMenuItem
             // 
             darkThemeToolStripMenuItem.Name = "darkThemeToolStripMenuItem";
-            darkThemeToolStripMenuItem.Size = new Size(180, 22);
+            darkThemeToolStripMenuItem.Size = new Size(140, 22);
             darkThemeToolStripMenuItem.Text = "Dark Theme";
             darkThemeToolStripMenuItem.Click += darkThemeToolStripMenuItem_Click;
             // 
@@ -344,6 +345,7 @@
             ClientSize = new Size(1584, 861);
             Controls.Add(pictureBox);
             Controls.Add(menuStrip);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip;
             MinimumSize = new Size(720, 480);
             Name = "FormMain";
